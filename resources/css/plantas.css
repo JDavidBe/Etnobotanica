@@ -1,0 +1,81 @@
+/* ══ FILTROS ══ */
+.filtros { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 24px; }
+.f-btn {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--texto-mid);
+  cursor: pointer;
+  font-size: .8rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  transition: var(--trans);
+  text-decoration: none;
+  display: inline-block;
+}
+.f-btn:hover, .f-btn.on {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+}
+
+/* ══ GRID PLANTAS ══ */
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+}
+.plant-card {
+  background: var(--bg-card);
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  cursor: pointer;
+  transition: var(--trans);
+  border: 1px solid transparent;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.plant-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--dorado);
+  box-shadow: var(--sombra-lg);
+}
+.plant-img {
+  width: 100%; height: 230px;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s;
+}
+.plant-card:hover .plant-img { transform: scale(1.04); }
+.plant-no-img {
+  width: 100%; height: 230px;
+  background: linear-gradient(135deg, var(--pale), #c8e6c9);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem;
+  color: var(--verde-mid);
+  opacity: .5;
+}
+.plant-info { padding: 20px; }
+.badge-v {
+  background: var(--verde); color: #fff;
+  padding: 3px 11px; border-radius: 50px;
+  font-size: .68rem; font-weight: 700; float: right;
+}
+.badge-p {
+  background: var(--warning); color: #fff;
+  padding: 3px 11px; border-radius: 50px;
+  font-size: .68rem; font-weight: 700; float: right;
+}
+.plant-nombre { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; color: var(--texto); }
+.plant-cient  { font-size: .76rem; color: var(--texto-suave); font-style: italic; margin-bottom: 8px; }
+.plant-uso    { font-size: .84rem; color: var(--texto-mid); }
+.plant-tags   { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.tag {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: .7rem; font-weight: 700;
+  background: var(--pale); color: var(--verde);
+  border: 1px solid #c8e6c9;
+}

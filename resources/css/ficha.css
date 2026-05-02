@@ -1,0 +1,146 @@
+/* ══ FICHA HEADER ══ */
+.ficha-header {
+  background: linear-gradient(135deg, var(--verde), var(--secondary));
+  padding: 40px 20px 32px;
+  color: #fff;
+}
+.ficha-header h2 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  margin-bottom: 10px;
+}
+.ficha-meta {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  font-size: .83rem; color: rgba(255,255,255,.65);
+}
+.ficha-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ══ FICHA LAYOUT ══ */
+.ficha-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 32px;
+  padding: 36px 20px;
+}
+@media (max-width: 860px) { .ficha-layout { grid-template-columns: 1fr; } }
+
+/* Columna imagen */
+.ficha-img-box {
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra-lg);
+  height: 300px;
+  background: linear-gradient(135deg, var(--pale), #c8e6c9);
+  display: flex; align-items: center; justify-content: center;
+}
+.ficha-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ficha-no-img {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  color: var(--verde-mid);
+}
+.ficha-no-img i { font-size: 4rem; opacity: .35; }
+.ficha-no-img p { font-size: .8rem; color: var(--texto-suave); }
+
+.video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--radio);
+  background: #111;
+  box-shadow: var(--sombra-lg);
+  margin-top: 18px;
+}
+.video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.no-video {
+  border-radius: var(--radio);
+  height: 150px;
+  background: var(--pale);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; color: var(--verde-mid);
+  margin-top: 18px;
+}
+.no-video i { font-size: 1.8rem; opacity: .4; }
+.no-video p { font-size: .78rem; color: var(--texto-suave); }
+
+/* Columna info */
+.info-cient {
+  background: var(--bg-card);
+  border-radius: var(--radio);
+  padding: 16px 20px;
+  box-shadow: var(--sombra);
+  margin-bottom: 16px;
+  border-left: 5px solid var(--dorado);
+  display: flex; align-items: center; gap: 14px;
+}
+.info-cient .lbl { font-size: .68rem; text-transform: uppercase; letter-spacing: 1.8px; color: var(--texto-suave); }
+.info-cient .val { font-family: 'Lora', serif; font-style: italic; font-size: 1.05rem; color: var(--texto); }
+
+.info-card {
+  background: var(--bg-card);
+  border-radius: var(--radio);
+  padding: 22px;
+  box-shadow: var(--sombra);
+  margin-bottom: 16px;
+  border-left: 5px solid var(--verde);
+}
+.info-card h3 {
+  font-family: 'Lora', serif;
+  font-size: .98rem;
+  color: var(--verde);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+}
+.info-card h3 i { color: var(--dorado); }
+.info-card p { font-size: .87rem; color: var(--texto-mid); line-height: 1.75; }
+
+.usos-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.uso-pill {
+  padding: 5px 15px;
+  border-radius: 20px;
+  background: var(--pale);
+  color: var(--verde);
+  font-size: .78rem;
+  font-weight: 700;
+  border: 1px solid #c8e6c9;
+}
+.uso-pill.main { background: var(--verde); color: #fff; border-color: var(--secondary); }
+
+.relato-card {
+  background: linear-gradient(135deg, var(--verde), var(--secondary));
+  border-radius: var(--radio);
+  padding: 24px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.relato-card::before {
+  content: '"';
+  position: absolute;
+  top: -20px; left: 14px;
+  font-size: 8rem;
+  font-family: 'Lora', serif;
+  color: rgba(255,255,255,.07);
+  line-height: 1;
+}
+.relato-card p   { font-size: .87rem; line-height: 1.78; font-style: italic; position: relative; }
+.relato-card .r-autor { margin-top: 10px; font-size: .74rem; color: var(--dorado-lt); }
+
+.btn-back {
+  background: var(--pale);
+  color: var(--verde);
+  border: 1.5px solid #c8e6c9;
+  padding: 10px 24px;
+  border-radius: 22px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  transition: var(--trans);
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+.btn-back:hover { background: var(--verde); color: #fff; }
