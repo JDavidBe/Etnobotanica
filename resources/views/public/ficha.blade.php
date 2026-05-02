@@ -117,6 +117,13 @@
        class="btn-back">
       <i class="fas fa-arrow-left"></i> Volver
     </a>
+
+    {{-- Comentarios --}}
+    @include('components.comentarios', [
+        'tipo'       => 'planta',
+        'tipo_id'    => $planta->id,
+        'comentarios'=> $comentarios,
+    ])
   </div>
 </div>
 

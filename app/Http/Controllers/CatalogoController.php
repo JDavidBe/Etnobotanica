@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Planta;
+use App\Models\Aporte;
 use App\Models\Subtema;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,13 @@ class CatalogoController extends Controller
     public function home()
     {
         $categorias = Categoria::all();
-        return view('public.home', compact('categorias'));
+
+        $aportesAprobados = Aporte::where('estado', 'aprobado')
+            ->orderByDesc('creado_en')
+            ->limit(6)
+            ->get();
+
+        return view('public.home', compact('categorias', 'aportesAprobados'));
     }
 
     public function catalogo()
@@ -81,7 +88,16 @@ class CatalogoController extends Controller
     public function ficha(Planta $planta)
     {
         $planta->load(['categoria', 'subtema']);
-        return view('public.ficha', compact('planta'));
+
+        $ip = request()->ip();
+        $comentarios = $planta->comentarios()
+            ->withCount('likes')
+            ->get()
+            ->map(fn($c) => array_merge($c->toArray(), [
+                'ya_likeado' => $c->yaLikeado($ip),
+            ]));
+
+        return view('public.ficha', compact('planta', 'comentarios'));
     }
 
     public function buscar(Request $request)

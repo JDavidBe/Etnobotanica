@@ -48,4 +48,11 @@ class Planta extends Model
     {
         return $this->belongsTo(Subtema::class);
     }
+
+    public function comentarios(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comentario::class, 'tipo_id')
+                    ->where('tipo', 'planta')
+                    ->orderByDesc('creado_en');
+    }
 }

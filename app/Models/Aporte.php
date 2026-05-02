@@ -28,4 +28,11 @@ class Aporte extends Model
     {
         return $this->img_path ? asset('storage/' . $this->img_path) : null;
     }
+
+    public function comentarios(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comentario::class, 'tipo_id')
+                    ->where('tipo', 'aporte')
+                    ->orderByDesc('creado_en');
+    }
 }

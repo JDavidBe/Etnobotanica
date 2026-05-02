@@ -4,14 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Aporte;
 use App\Models\Categoria;
+use App\Models\Comentario;
 use Illuminate\Http\Request;
 
 class AporteController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         $categorias = Categoria::all();
-        return view('public.aportar', compact('categorias'));
+
+        $aportesAprobados = Aporte::where('estado', 'aprobado')
+            ->when($request->query('cat'), fn($q, $cat) => $q->where('categoria', $cat))
+            ->orderByDesc('creado_en')
+            ->paginate(9);
+
+        return view('public.aportar', compact('categorias', 'aportesAprobados'));
+    }
+
+    public function show(Aporte $aporte)
+    {
+        abort_if($aporte->estado !== 'aprobado', 404);
+
+        $ip = request()->ip();
+        $comentarios = $aporte->comentarios()
+            ->withCount('likes')
+            ->get()
+            ->map(fn($c) => array_merge($c->toArray(), [
+                'ya_likeado' => $c->yaLikeado($ip),
+            ]));
+
+        return view('public.aporte-detalle', compact('aporte', 'comentarios'));
     }
 
     public function store(Request $request)

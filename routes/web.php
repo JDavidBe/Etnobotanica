@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AporteController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\CategoriaAdminController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -32,6 +33,13 @@ Route::get('/plantas/{planta}', [CatalogoController::class, 'ficha'])
 
 Route::get('/buscar', [CatalogoController::class, 'buscar'])
     ->name('plantas.buscar');
+
+// Detalle público de un aporte aprobado
+Route::get('/aportes/{aporte}', [AporteController::class, 'show'])->name('aportes.show');
+
+// Comentarios (público, sin auth)
+Route::post('/comentarios',                 [ComentarioController::class, 'store'])->name('comentarios.store');
+Route::post('/comentarios/{comentario}/like', [ComentarioController::class, 'like'])->name('comentarios.like');
 
 // Formulario aportar (solo lectores)
 Route::middleware('role:lector')->group(function () {

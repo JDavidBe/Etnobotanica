@@ -81,6 +81,12 @@
           <td>{{ $aporte->enviado_por }}</td>
           <td>{{ $aporte->creado_en->format('d M Y') }}</td>
           <td>
+            <button class="abtn"
+                    style="background:var(--pale);color:var(--verde);border:1px solid #c8e6c9"
+                    onclick="abrirDetallesAporte({{ $aporte->id }})">
+              <i class="fas fa-eye"></i> Detalles
+            </button>
+
             @if($aporte->estado !== 'aprobado')
               <form method="POST"
                     action="{{ route('admin.moderacion.aprobar', $aporte) }}"
@@ -148,11 +154,83 @@
   @endif
 </div>
 
+{{-- Modal detalles del aporte --}}
+<div id="modal-det-aporte" class="modal-ov" onclick="if(event.target===this)cerrarDetallesAporte()">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-hdr">
+      <h3><i class="fas fa-clipboard-list"></i> <span id="mdet-titulo"></span></h3>
+      <button class="modal-close" onclick="cerrarDetallesAporte()"><i class="fas fa-times"></i></button>
+    </div>
+
+    {{-- Imagen --}}
+    <div id="mdet-img-wrap" style="display:none">
+      <img id="mdet-img" src="" alt=""
+           style="width:100%;max-height:220px;object-fit:cover">
+    </div>
+
+    <div class="modal-body">
+
+      {{-- Badges estado + categoría --}}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;align-items:center">
+        <span id="mdet-estado" class="pill"></span>
+        <span id="mdet-categoria"
+              style="background:var(--pale);color:var(--verde);padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700"></span>
+        <em id="mdet-cientifico" style="font-size:.82rem;color:var(--texto-suave)"></em>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 20px">
+
+        <div style="grid-column:1/-1">
+          <p class="mdet-label">Uso principal</p>
+          <p id="mdet-uso" class="mdet-val"></p>
+        </div>
+
+        <div style="grid-column:1/-1">
+          <p class="mdet-label">Preparación / uso</p>
+          <p id="mdet-preparacion" class="mdet-val" style="white-space:pre-line;line-height:1.65"></p>
+        </div>
+
+        <div id="mdet-relato-wrap" style="grid-column:1/-1;display:none">
+          <p class="mdet-label">Historia personal</p>
+          <p id="mdet-relato" class="mdet-val" style="font-style:italic;color:var(--texto-suave);line-height:1.6"></p>
+        </div>
+
+        <div>
+          <p class="mdet-label">Enviado por</p>
+          <p id="mdet-enviado" class="mdet-val"></p>
+        </div>
+
+        <div>
+          <p class="mdet-label">IP de origen</p>
+          <p id="mdet-ip" class="mdet-val" style="font-family:monospace;font-size:.82rem"></p>
+        </div>
+
+        <div style="grid-column:1/-1">
+          <p class="mdet-label">Fecha de envío</p>
+          <p id="mdet-fecha" class="mdet-val"></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="cerrarDetallesAporte()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.mdet-label {
+  font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--texto-suave);margin:0 0 3px;
+}
+.mdet-val { margin:0;font-size:.88rem;color:var(--texto); }
+</style>
+
 @endsection
 
 @push('scripts')
 <script>
-// Abrir modal de imagen
 function abrirModal(id) {
   const m = document.getElementById(id);
   if (m) { m.style.display = 'flex'; }
@@ -160,6 +238,72 @@ function abrirModal(id) {
 function cerrarModal(id) {
   const m = document.getElementById(id);
   if (m) { m.style.display = 'none'; }
+}
+
+// Datos completos de todos los aportes de la página actual
+const _modAportes = @json($aportes->items());
+
+const _estadoClases = {
+  pendiente: 'p-pend',
+  aprobado:  'p-ok',
+  rechazado: 'p-rej',
+};
+const _estadoLabels = {
+  pendiente: 'Pendiente',
+  aprobado:  'Aprobado',
+  rechazado: 'Rechazado',
+};
+
+function abrirDetallesAporte(id) {
+  const ap = _modAportes.find(a => a.id === id);
+  if (!ap) return;
+
+  document.getElementById('mdet-titulo').textContent    = ap.nombre_planta;
+  document.getElementById('mdet-categoria').textContent = ap.categoria;
+  document.getElementById('mdet-cientifico').textContent= ap.cientifico || '';
+  document.getElementById('mdet-uso').textContent       = ap.uso;
+  document.getElementById('mdet-preparacion').textContent = ap.preparacion;
+  document.getElementById('mdet-enviado').textContent   = ap.enviado_por || 'Anónimo';
+  document.getElementById('mdet-ip').textContent        = ap.ip_origen  || '—';
+
+  const fechaEl = document.getElementById('mdet-fecha');
+  fechaEl.textContent = new Date(ap.creado_en).toLocaleString('es-CO', {
+    day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+
+  // Estado pill
+  const estadoEl = document.getElementById('mdet-estado');
+  estadoEl.className = 'pill ' + (_estadoClases[ap.estado] || '');
+  estadoEl.textContent = _estadoLabels[ap.estado] || ap.estado;
+
+  // Relato
+  const relatoWrap = document.getElementById('mdet-relato-wrap');
+  if (ap.relato) {
+    document.getElementById('mdet-relato').textContent = ap.relato;
+    relatoWrap.style.display = 'block';
+  } else {
+    relatoWrap.style.display = 'none';
+  }
+
+  // Imagen
+  const imgWrap = document.getElementById('mdet-img-wrap');
+  if (ap.img_path) {
+    document.getElementById('mdet-img').src = '/storage/' + ap.img_path;
+    document.getElementById('mdet-img').alt = ap.nombre_planta;
+    imgWrap.style.display = 'block';
+  } else {
+    imgWrap.style.display = 'none';
+  }
+
+  const modal = document.getElementById('modal-det-aporte');
+  modal.style.display = 'flex';
+  modal.classList.add('open');
+}
+
+function cerrarDetallesAporte() {
+  const modal = document.getElementById('modal-det-aporte');
+  modal.style.display = 'none';
+  modal.classList.remove('open');
 }
 </script>
 @endpush
