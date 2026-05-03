@@ -3,6 +3,8 @@
 use App\Http\Controllers\AporteController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\LectorController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\CategoriaAdminController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -37,14 +39,28 @@ Route::get('/buscar', [CatalogoController::class, 'buscar'])
 // Detalle público de un aporte aprobado
 Route::get('/aportes/{aporte}', [AporteController::class, 'show'])->name('aportes.show');
 
-// Comentarios (público, sin auth)
-Route::post('/comentarios',                 [ComentarioController::class, 'store'])->name('comentarios.store');
+// Comentarios — store requiere auth (manejado en el controller)
+Route::post('/comentarios',                   [ComentarioController::class, 'store'])->middleware('auth')->name('comentarios.store');
 Route::post('/comentarios/{comentario}/like', [ComentarioController::class, 'like'])->name('comentarios.like');
 
-// Formulario aportar (solo lectores)
-Route::middleware('role:lector')->group(function () {
-    Route::get('/aportar',         [AporteController::class, 'create'])->name('aportar');
-    Route::post('/aportar',        [AporteController::class, 'store'])->name('aportar.store');
+// Formulario aportar (solo rol lector — auth implícito en role middleware de Spatie)
+Route::middleware(['auth', 'role:lector'])->group(function () {
+    Route::get('/aportar',  [AporteController::class, 'create'])->name('aportar');
+    Route::post('/aportar', [AporteController::class, 'store'])->name('aportar.store');
+});
+
+// Dashboard lector
+Route::middleware(['auth', 'role:lector'])->prefix('mis-aportes')->name('lector.')->group(function () {
+    Route::get('/',                [LectorController::class, 'dashboard'])->name('dashboard');
+    Route::get('/{aporte}/editar', [LectorController::class, 'edit'])->name('aporte.edit');
+    Route::put('/{aporte}',        [LectorController::class, 'update'])->name('aporte.update');
+});
+
+// Notificaciones (auth)
+Route::middleware('auth')->prefix('notificaciones')->name('notificaciones.')->group(function () {
+    Route::get('/',                        [NotificacionController::class, 'index'])->name('index');
+    Route::post('/marcar-leidas',          [NotificacionController::class, 'marcarLeidas'])->name('leidas');
+    Route::post('/{notificacion}/leida',   [NotificacionController::class, 'marcarUna'])->name('una');
 });
 
 /* ══════════════════════════════════════════════
@@ -63,7 +79,7 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
     // Moderación
     Route::get('moderacion', [ModeracionController::class, 'index'])->name('moderacion.index');
     Route::patch('moderacion/{aporte}/aprobar',  [ModeracionController::class, 'aprobar'])->name('moderacion.aprobar');
-    Route::patch('moderacion/{aporte}/rechazar', [ModeracionController::class, 'rechazar'])->name('moderacion.rechazar');
+    Route::post('moderacion/{aporte}/rechazar',  [ModeracionController::class, 'rechazar'])->name('moderacion.rechazar');
     Route::delete('moderacion/{aporte}', [ModeracionController::class, 'destroy'])->name('moderacion.destroy');
 
     // Auditoría y Reportes

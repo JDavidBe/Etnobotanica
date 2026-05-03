@@ -97,12 +97,10 @@
             @endif
 
             @if($aporte->estado !== 'rechazado')
-              <form method="POST"
-                    action="{{ route('admin.moderacion.rechazar', $aporte) }}"
-                    style="display:inline">
-                @csrf @method('PATCH')
-                <button type="submit" class="abtn ab-rej">Rechazar</button>
-              </form>
+              <button class="abtn ab-rej"
+                      onclick="abrirModalRechazo({{ $aporte->id }}, '{{ addslashes($aporte->nombre_planta) }}')">
+                <i class="fas fa-times"></i> Rechazar
+              </button>
             @endif
 
             <form method="POST"
@@ -152,6 +150,41 @@
       {{ $aportes->appends(request()->query())->links() }}
     </div>
   @endif
+</div>
+
+
+{{-- Modal motivo de rechazo --}}
+<div id="modal-rechazo" class="modal-ov" onclick="if(event.target===this)cerrarModalRechazo()">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-hdr">
+      <h3><i class="fas fa-times-circle"></i> Rechazar aporte</h3>
+      <button class="modal-close" onclick="cerrarModalRechazo()"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="form-rechazo" method="POST" action="">
+      @csrf
+      @method('POST')
+      <div class="modal-body">
+        <p style="font-size:.88rem;color:var(--texto-suave);margin:0 0 14px">
+          Estás rechazando el aporte <strong id="rechazo-nombre"></strong>.
+          El aportante verá este motivo en su panel.
+        </p>
+        <div class="f-group">
+          <label style="font-size:.82rem;font-weight:700;color:var(--texto);display:block;margin-bottom:6px">
+            Motivo del rechazo *
+          </label>
+          <textarea name="motivo_rechazo" rows="4"
+                    placeholder="Explica claramente por qué no puede publicarse este aporte…"
+                    required maxlength="500"
+                    style="width:100%;box-sizing:border-box;border:1px solid var(--border-lt);border-radius:9px;padding:10px 14px;font-size:.88rem;font-family:'Nunito',sans-serif;background:var(--fondo-card,#fafafa);color:var(--texto);resize:vertical"></textarea>
+          <span style="font-size:.72rem;color:var(--texto-suave);float:right" id="rechazo-chars">0 / 500</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="abtn" onclick="cerrarModalRechazo()" style="background:var(--fondo-card);border:1px solid var(--border-lt)">Cancelar</button>
+        <button type="submit" class="abtn ab-rej"><i class="fas fa-times-circle"></i> Confirmar rechazo</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 {{-- Modal detalles del aporte --}}
@@ -302,6 +335,28 @@ function abrirDetallesAporte(id) {
 
 function cerrarDetallesAporte() {
   const modal = document.getElementById('modal-det-aporte');
+  modal.style.display = 'none';
+  modal.classList.remove('open');
+}
+
+// ── Modal rechazo ──
+function abrirModalRechazo(id, nombre) {
+  const form = document.getElementById('form-rechazo');
+  form.action = '/admin/moderacion/' + id + '/rechazar';
+  document.getElementById('rechazo-nombre').textContent = '«' + nombre + '»';
+  const ta = form.querySelector('textarea');
+  ta.value = '';
+  document.getElementById('rechazo-chars').textContent = '0 / 500';
+  ta.addEventListener('input', () => {
+    document.getElementById('rechazo-chars').textContent = ta.value.length + ' / 500';
+  }, {once: false});
+  const modal = document.getElementById('modal-rechazo');
+  modal.style.display = 'flex';
+  modal.classList.add('open');
+  setTimeout(() => ta.focus(), 80);
+}
+function cerrarModalRechazo() {
+  const modal = document.getElementById('modal-rechazo');
   modal.style.display = 'none';
   modal.classList.remove('open');
 }

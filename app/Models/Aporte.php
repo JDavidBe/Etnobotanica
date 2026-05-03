@@ -18,8 +18,13 @@ class Aporte extends Model
         'nombre_planta', 'cientifico', 'categoria',
         'uso', 'preparacion', 'relato',
         'img_path',
-        'estado', 'enviado_por', 'ip_origen',
+        'estado', 'motivo_rechazo', 'enviado_por', 'ip_origen', 'user_id',
     ];
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Devuelve la URL pública de la imagen del aporte.

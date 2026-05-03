@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Aporte;
 use App\Models\Categoria;
 use App\Models\Comentario;
+use App\Models\Notificacion;
 use Illuminate\Http\Request;
 
 class AporteController extends Controller
@@ -62,7 +63,7 @@ class AporteController extends Controller
             $imgPath = $request->file('imagen')->store('aportes', 'public');
         }
 
-        Aporte::create([
+        $aporte = Aporte::create([
             'nombre_planta' => $request->nombre_planta,
             'cientifico'    => $request->cientifico ?? '',
             'categoria'     => $request->categoria,
@@ -70,10 +71,19 @@ class AporteController extends Controller
             'preparacion'   => $request->preparacion,
             'relato'        => $request->relato,
             'img_path'      => $imgPath,
-            'enviado_por'   => 'Anónimo',
+            'enviado_por'   => auth()->check() ? auth()->user()->name : 'Anónimo',
             'ip_origen'     => $request->ip(),
             'estado'        => 'pendiente',
+            'user_id'       => auth()->id(),
         ]);
+
+        // Notificar a admins y moderadores
+        Notificacion::crearParaAdmins(
+            'nuevo_aporte',
+            'Nuevo aporte para revisar',
+            "«{$aporte->nombre_planta}» enviado por {$aporte->enviado_por} está pendiente de moderación.",
+            route('admin.moderacion.index')
+        );
 
         return redirect()->route('home')
             ->with('success', '¡Gracias! Tu aporte fue enviado para moderación (RF-07).');

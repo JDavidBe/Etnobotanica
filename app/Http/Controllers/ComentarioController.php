@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comentario;
 use App\Models\ComentarioLike;
+use App\Models\Notificacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
@@ -14,7 +16,6 @@ class ComentarioController extends Controller
             'tipo'      => 'required|in:planta,aporte',
             'tipo_id'   => 'required|integer',
             'contenido' => 'required|string|max:1000',
-            'autor'     => 'nullable|string|max:80',
         ], [
             'contenido.required' => 'El comentario no puede estar vacío.',
             'contenido.max'      => 'El comentario no puede superar 1000 caracteres.',
@@ -24,9 +25,12 @@ class ComentarioController extends Controller
             'tipo'      => $request->tipo,
             'tipo_id'   => $request->tipo_id,
             'contenido' => $request->contenido,
-            'autor'     => trim($request->autor) ?: 'Anónimo',
+            'autor'     => auth()->user()->name,
+            'user_id'   => auth()->id(),
             'ip_origen' => $request->ip(),
         ]);
+
+        $comentario->refresh(); // hidrata creado_en desde la BD
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -59,6 +63,11 @@ class ComentarioController extends Controller
                 'ip_origen'     => $ip,
             ]);
             $liked = true;
+
+            // Notificar al autor del comentario si tiene user_id
+            // Buscar user por ip no es viable; comentarios anónimos no se notifican
+            // Solo notificamos si el comentario fue dejado por un usuario autenticado
+            // (requeriría user_id en comentarios — extensión futura)
         }
 
         $total = $comentario->likes()->count();

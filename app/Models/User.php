@@ -30,6 +30,16 @@ class User extends Authenticatable
 
     public function aportes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(AuditoriaLog::class, 'usuario_id');
+        return $this->hasMany(Aporte::class, 'user_id');
+    }
+
+    public function notificaciones(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Notificacion::class, 'user_id')->orderByDesc('creado_en');
+    }
+
+    public function notificacionesNoLeidas(): int
+    {
+        return $this->notificaciones()->where('leida', false)->count();
     }
 }

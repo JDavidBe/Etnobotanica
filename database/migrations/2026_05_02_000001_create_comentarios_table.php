@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('contenido');
             $table->string('autor', 100)->default('Anónimo');
             $table->string('ip_origen', 45)->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamp('creado_en')->useCurrent();
         });
 

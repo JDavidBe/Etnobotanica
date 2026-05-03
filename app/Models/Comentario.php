@@ -11,7 +11,7 @@ class Comentario extends Model
     const CREATED_AT = 'creado_en';
 
     protected $fillable = [
-        'tipo', 'tipo_id', 'contenido', 'autor', 'ip_origen',
+        'tipo', 'tipo_id', 'contenido', 'autor', 'ip_origen', 'user_id',
     ];
 
     protected $casts = [
