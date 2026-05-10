@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notificacion extends Model
 {
+    protected $table = 'notificaciones';
     public $timestamps = false;
     const CREATED_AT = 'creado_en';
 
