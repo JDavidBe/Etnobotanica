@@ -42,19 +42,8 @@ function toast(msg, tipo = '') {
   setTimeout(() => el.classList.remove('show'), 3200);
 }
 
-/* ── MOSTRAR TOAST DE SESIÓN (flash de Laravel) ── */
-document.addEventListener('DOMContentLoaded', () => {
-  setThemeButtonIcon();
-
-  const flash = document.getElementById('flash-success');
-  if (flash) toast(flash.dataset.msg);
-  const flashErr = document.getElementById('flash-error');
-  if (flashErr) toast(flashErr.dataset.msg, 'err');
-
-  document.querySelectorAll('.modal-ov').forEach(o =>
-    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); })
-  );
-});
+/* ── BUSCADOR ── */
+// Removido, ahora es un form simple
 
 /* ── MODALES ── */
 function abrirModal(id) { document.getElementById(id)?.classList.add('open'); }

@@ -32,7 +32,7 @@
 
   <div class="tbl-card" style="padding:22px">
     <h3 style="font-size:.95rem;font-weight:700;margin-bottom:16px;color:var(--verde)">
-      Moderación (RF-07)
+      Moderación 
     </h3>
     <form method="POST" action="{{ route('admin.config') }}">
       @csrf

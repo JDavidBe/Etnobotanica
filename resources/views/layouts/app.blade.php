@@ -21,6 +21,7 @@
 </main>
 
 @vite(['resources/js/app.js'])
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 @stack('scripts')
 
 </body>

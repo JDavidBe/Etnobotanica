@@ -49,7 +49,7 @@
     </a>
     <a href="{{ route('admin.auditoria') }}"
        class="nav-item {{ request()->routeIs('admin.auditoria') ? 'on' : '' }}">
-      <i class="fas fa-history"></i> Auditoría (RF-05)
+      <i class="fas fa-history"></i> Auditoría
     </a>
 
     <div class="nav-lbl">Sistema</div>

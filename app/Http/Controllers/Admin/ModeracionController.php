@@ -13,14 +13,29 @@ class ModeracionController extends Controller
     public function index(Request $request)
     {
         $pendientes   = Aporte::where('estado', 'pendiente')->count();
-        $estadoFiltro = $request->query('estado');
+        $aprobados    = Aporte::where('estado', 'aprobado')->count();
+        $rechazados   = Aporte::where('estado', 'rechazado')->count();
+        $total        = $pendientes + $aprobados + $rechazados;
+
+        // Aportes por mes (últimos 6 meses) para la gráfica
+        $porMes = Aporte::selectRaw("strftime('%Y-%m', creado_en) as mes, count(*) as total")
+            ->where('creado_en', '>=', now()->subMonths(6))
+            ->groupByRaw("strftime('%Y-%m', creado_en)")
+            ->orderBy('mes')
+            ->get();
+
+        $estadoFiltro   = $request->query('estado');
         $estadosValidos = ['pendiente', 'aprobado', 'rechazado'];
 
-        $aportes = Aporte::when(in_array($estadoFiltro, $estadosValidos), fn($q) => $q->where('estado', $estadoFiltro))
+        $aportes = Aporte::with('imagenes')
+            ->when(in_array($estadoFiltro, $estadosValidos), fn($q) => $q->where('estado', $estadoFiltro))
             ->orderByDesc('creado_en')
             ->paginate(20);
 
-        return view('admin.moderacion.index', compact('pendientes', 'aportes', 'estadoFiltro'));
+        return view('admin.moderacion.index', compact(
+            'pendientes', 'aprobados', 'rechazados', 'total',
+            'porMes', 'aportes', 'estadoFiltro'
+        ));
     }
 
     public function aprobar(Aporte $aporte)
@@ -33,7 +48,6 @@ class ModeracionController extends Controller
             'usuario_id' => auth()->id(),
         ]);
 
-        // Notificar al lector si el aporte tiene user_id
         if ($aporte->user_id) {
             Notificacion::crearParaUser(
                 $aporte->user_id,
@@ -83,6 +97,9 @@ class ModeracionController extends Controller
     {
         if ($aporte->img_path && Storage::exists('public/' . $aporte->img_path)) {
             Storage::delete('public/' . $aporte->img_path);
+        }
+        foreach ($aporte->imagenes as $img) {
+            Storage::disk('public')->delete($img->img_path);
         }
 
         $aporte->delete();

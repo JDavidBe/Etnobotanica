@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 ══════════════════════════════════════════════ */
 Route::get('/', [CatalogoController::class, 'home'])->name('home');
 
+Route::get('/creditos', fn() => view('public.creditos'))->name('creditos');
+
 Route::get('/catalogo', [CatalogoController::class, 'catalogo'])->name('catalogo');
 
 Route::get('/categorias/{categoria}', [CatalogoController::class, 'categoria'])

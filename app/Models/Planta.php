@@ -14,20 +14,18 @@ class Planta extends Model
     protected $fillable = [
         'nombre', 'cientifico', 'categoria_id', 'subtema_id',
         'uso', 'instrucciones', 'contexto', 'relato',
-        'video_url', 'img_url', 'img_path', 'verificada', 'tags',
+        'video_url', 'video_persona_nombre', 'video_persona_rol', 'video_validado',
+        'img_url', 'img_path', 'verificada', 'tags',
     ];
 
     protected function casts(): array
     {
         return [
-            'verificada' => 'boolean',
+            'verificada'     => 'boolean',
+            'video_validado' => 'boolean',
         ];
     }
 
-    /**
-     * Devuelve la URL pública de la imagen:
-     * prioriza img_path (subida) sobre img_url (URL externa).
-     */
     public function getImagenUrlAttribute(): ?string
     {
         if ($this->img_path) {
@@ -39,9 +37,16 @@ class Planta extends Model
         return null;
     }
 
+    // Categoría principal (FK legado)
     public function categoria(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    // Muchos a muchos — todas las categorías de la planta
+    public function categorias(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Categoria::class, 'categoria_planta');
     }
 
     public function subtema(): \Illuminate\Database\Eloquent\Relations\BelongsTo

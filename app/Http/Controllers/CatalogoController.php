@@ -87,7 +87,7 @@ class CatalogoController extends Controller
 
     public function ficha(Planta $planta)
     {
-        $planta->load(['categoria', 'subtema']);
+        $planta->load(['categoria', 'subtema', 'categorias']);
 
         $ip = request()->ip();
         $comentarios = $planta->comentarios()
@@ -108,13 +108,20 @@ class CatalogoController extends Controller
         if (strlen($q) >= 2) {
             $plantas = Planta::with(['categoria', 'subtema'])
                 ->where(function ($query) use ($q) {
-                    $query->where('nombre',    'ilike', "%{$q}%")
-                          ->orWhere('cientifico', 'ilike', "%{$q}%")
-                          ->orWhere('uso',        'ilike', "%{$q}%")
-                          ->orWhere('tags',       'ilike', "%{$q}%");
+                    $query->where('nombre',    'LIKE', "%{$q}%")
+                          ->orWhere('cientifico', 'LIKE', "%{$q}%")
+                          ->orWhere('uso',        'LIKE', "%{$q}%")
+                          ->orWhere('tags',       'LIKE', "%{$q}%")
+                          ->orWhereHas('subtema', function ($subQuery) use ($q) {
+                              $subQuery->where('nombre', 'LIKE', "%{$q}%");
+                          });
                 })
                 ->orderBy('nombre')
                 ->get();
+        }
+
+        if ($request->header('HX-Request')) {
+            return view('public.partials.search-results', compact('plantas', 'q'));
         }
 
         return view('public.buscar', compact('plantas', 'q'));

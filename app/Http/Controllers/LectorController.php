@@ -10,7 +10,7 @@ class LectorController extends Controller
 {
     public function dashboard()
     {
-        $aportes = auth()->user()->aportes()->orderByDesc('creado_en')->get();
+        $aportes = auth()->user()->aportes()->with('imagenes')->orderByDesc('creado_en')->get();
         return view('lector.dashboard', compact('aportes'));
     }
 

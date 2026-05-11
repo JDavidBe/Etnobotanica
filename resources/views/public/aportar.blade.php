@@ -69,29 +69,32 @@
       </div>
 
       <div class="f-group">
-        <label>Foto de la planta <span style="font-weight:400;font-size:.8rem;opacity:.7">(opcional — JPG, PNG, WEBP, máx. 4 MB)</span></label>
+        <label>Fotos de la planta <span style="font-weight:400;font-size:.8rem;opacity:.7">(opcional — hasta 5 imágenes, JPG/PNG/WEBP, máx. 4 MB c/u)</span></label>
+        <div id="preview-multi-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
         <div class="img-upload-wrap" id="img-upload-wrap-aporte">
-          <label for="imagen-aporte" class="img-upload-label" id="img-upload-label-aporte">
-            <i class="fas fa-camera"></i>
-            <span>Haz clic o arrastra una foto aquí</span>
+          <label for="imagenes-aporte" class="img-upload-label" id="img-upload-label-aporte">
+            <i class="fas fa-images"></i>
+            <span>Haz clic o arrastra fotos aquí (múltiple)</span>
           </label>
-          <input type="file" name="imagen" id="imagen-aporte"
+          <input type="file" name="imagenes[]" id="imagenes-aporte"
                  accept="image/jpeg,image/png,image/webp"
+                 multiple
                  style="display:none"
-                 onchange="previewImagen(this, 'preview-aporte', 'img-upload-label-aporte')">
-          <div id="preview-aporte" class="img-preview" style="display:none">
-            <img id="preview-aporte-img" src="" alt="Vista previa">
-            <button type="button" class="img-remove-btn" onclick="quitarImagen('imagen-aporte','preview-aporte','img-upload-label-aporte')">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+                 onchange="previewMultiple(this)">
         </div>
+        <small id="img-count-msg" style="color:var(--texto-suave);font-size:.78rem;display:block;margin-top:4px"></small>
       </div>
 
       <div class="consent">
         <input type="checkbox" name="consentimiento" id="a-consent" required>
         <p>Acepto que esta información sea publicada en el catálogo comunitario bajo licencia abierta
-          <strong>(RF-06 — Consentimiento informado)</strong>.</p>
+          <strong>Consentimiento informado</strong>.</p>
+      </div>
+
+      <div class="consent" style="background:#fff8e1;border-color:#ffe082">
+        <input type="checkbox" name="consentimiento_img" id="a-consent-img" required>
+        <p>Confirmo que soy el autor o tengo autorización expresa para publicar las imágenes adjuntas, y asumo la responsabilidad sobre los derechos de autor y el contenido del material enviado
+          <strong>(Derechos de imagen y responsabilidad)</strong>.</p>
       </div>
 
       <div class="f-actions">
@@ -244,22 +247,24 @@
 
 @push('scripts')
 <script>
-function previewImagen(input, previewId, labelId) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById(previewId + '-img').src = e.target.result;
-    document.getElementById(previewId).style.display = 'block';
-    document.getElementById(labelId).style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-}
-
-function quitarImagen(inputId, previewId, labelId) {
-  document.getElementById(inputId).value = '';
-  document.getElementById(previewId).style.display = 'none';
-  document.getElementById(labelId).style.display = 'flex';
+function previewMultiple(input) {
+  const wrap = document.getElementById('preview-multi-wrap');
+  const msg  = document.getElementById('img-count-msg');
+  const files = Array.from(input.files).slice(0, 5);
+  wrap.innerHTML = '';
+  if (files.length === 0) { msg.textContent = ''; return; }
+  msg.textContent = files.length + ' imagen(es) seleccionada(s)';
+  files.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.style.cssText = 'position:relative;width:80px;height:80px';
+      div.innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--verde-light,#a5d6a7)">
+        <span style="position:absolute;top:2px;left:4px;background:rgba(0,0,0,.55);color:#fff;font-size:.65rem;border-radius:4px;padding:1px 5px">${i+1}</span>`;
+      wrap.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 const _aportes = @json($aportesAprobados->items());

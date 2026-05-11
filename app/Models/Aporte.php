@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Aporte extends Model
@@ -14,6 +13,7 @@ class Aporte extends Model
     protected $casts = [
         'creado_en' => 'datetime',
     ];
+
     protected $fillable = [
         'nombre_planta', 'cientifico', 'categoria',
         'uso', 'preparacion', 'relato',
@@ -26,8 +26,14 @@ class Aporte extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Múltiples imágenes
+    public function imagenes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(AporteImagen::class)->orderBy('orden');
+    }
+
     /**
-     * Devuelve la URL pública de la imagen del aporte.
+     * URL de la primera imagen (compatibilidad legado).
      */
     public function getImagenUrlAttribute(): ?string
     {

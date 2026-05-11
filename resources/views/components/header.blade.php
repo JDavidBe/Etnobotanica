@@ -16,22 +16,25 @@
   </div>
   @endif
 
-  <div class="search-wrap">
+  <form action="{{ route('plantas.buscar') }}" method="GET" class="search-wrap">
     <i class="fas fa-search"></i>
     <input type="text"
-           id="q-search"
+           name="q"
            placeholder="Buscar planta…"
-           autocomplete="off"
-           hx-get="{{ route('plantas.buscar') }}"
-           hx-trigger="input changed delay:300ms"
-           hx-target="#search-results"
-           hx-push-url="true">
-  </div>
+           autocomplete="off">
+  </form>
 
   <div class="hdr-right">
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Claro / Oscuro">
       <i class="fas fa-moon"></i>
     </button>
+
+    {{-- Créditos --}}
+    <a href="{{ route('creditos') }}" class="btn-hdr"
+       style="background:transparent;color:var(--texto-nav,rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.25);font-size:.8rem"
+       title="Créditos del proyecto">
+      <i class="fas fa-award"></i> Créditos
+    </a>
 
     {{-- Botón Aportar: solo para rol lector --}}
     @auth

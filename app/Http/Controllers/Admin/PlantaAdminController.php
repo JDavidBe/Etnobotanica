@@ -14,7 +14,7 @@ class PlantaAdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Planta::with(['categoria', 'subtema']);
+        $query = Planta::with(['categoria', 'subtema', 'categorias']);
 
         if ($request->filled('q')) {
             $q = $request->q;
@@ -23,8 +23,8 @@ class PlantaAdminController extends Controller
                 ->orWhere('cientifico', 'ilike', "%{$q}%"));
         }
 
-        $plantas     = $query->orderBy('nombre')->paginate(20);
-        $categorias  = Categoria::orderBy('nombre')->get();
+        $plantas    = $query->orderBy('nombre')->paginate(20);
+        $categorias = Categoria::orderBy('nombre')->get();
 
         return view('admin.plantas.index', compact('plantas', 'categorias'));
     }
@@ -38,26 +38,33 @@ class PlantaAdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'        => 'required|string|max:150',
-            'cientifico'    => 'nullable|string|max:150',
-            'categoria_id'  => 'required|exists:categorias,id',
-            'subtema_id'    => 'required|exists:subtemas,id',
-            'uso'           => 'required|string|max:255',
-            'instrucciones' => 'required|string',
-            'contexto'      => 'nullable|string',
-            'relato'        => 'nullable|string',
-            'video_url'     => 'nullable|string|max:500',
-            'video_file'    => 'nullable|file|mimes:mp4,webm,ogv,avi|max:51200',
-            'imagen'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'tags'          => 'nullable|string|max:300',
-            'verificada'    => 'boolean',
+            'nombre'               => 'required|string|max:150',
+            'cientifico'           => 'nullable|string|max:150',
+            'categoria_id'         => 'required|exists:categorias,id',
+            'categorias_extra'     => 'nullable|array',
+            'categorias_extra.*'   => 'exists:categorias,id',
+            'subtema_id'           => 'required|exists:subtemas,id',
+            'uso'                  => 'required|string|max:255',
+            'instrucciones'        => 'required|string',
+            'contexto'             => 'nullable|string',
+            'relato'               => 'nullable|string',
+            'video_url'            => 'nullable|string|max:500',
+            'video_file'           => 'nullable|file|mimes:mp4,webm,ogv,avi|max:51200',
+            'video_persona_nombre' => 'nullable|string|max:150',
+            'video_persona_rol'    => 'nullable|string|max:100',
+            'video_validado'       => 'boolean',
+            'imagen'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'tags'                 => 'nullable|string|max:300',
+            'verificada'           => 'boolean',
         ]);
 
-        $data['cientifico'] = $data['cientifico'] ?? 'sp.';
-        $data['verificada'] = $request->boolean('verificada');
-        $data['video_url']  = $data['video_url'] ?: null;
+        $data['cientifico']           = $data['cientifico'] ?? 'sp.';
+        $data['verificada']           = $request->boolean('verificada');
+        $data['video_validado']       = $request->boolean('video_validado');
+        $data['video_url']            = $data['video_url'] ?: null;
+        $data['video_persona_nombre'] = $data['video_persona_nombre'] ?? null;
+        $data['video_persona_rol']    = $data['video_persona_rol'] ?? null;
 
-        // Convertir URLs de YouTube watch a embed si es necesario
         if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
             $videoId = $this->extractYouTubeVideoId($data['video_url']);
             if ($videoId) {
@@ -65,12 +72,10 @@ class PlantaAdminController extends Controller
             }
         }
 
-        // Validar formato del video_url
         if ($data['video_url'] && !preg_match('/^(https?:\/\/|videos\/)/', $data['video_url'])) {
-            return back()->withErrors(['video_url' => 'La URL del video debe ser una URL externa válida o una ruta local que comience con "videos/".'])->withInput();
+            return back()->withErrors(['video_url' => 'La URL del video debe ser una URL externa válida.'])->withInput();
         }
 
-        // Procesar archivo de video si se subió
         if ($request->hasFile('video_file')) {
             $data['video_url'] = $request->file('video_file')->store('videos', 'public');
         }
@@ -79,9 +84,14 @@ class PlantaAdminController extends Controller
             $data['img_path'] = $request->file('imagen')->store('plantas', 'public');
         }
 
-        unset($data['imagen']);
+        $categoriasExtra = $data['categorias_extra'] ?? [];
+        unset($data['imagen'], $data['categorias_extra']);
 
         $planta = Planta::create($data);
+
+        // Sincronizar categorías M2M (incluye la principal)
+        $todasCategorias = array_unique(array_merge([$data['categoria_id']], $categoriasExtra));
+        $planta->categorias()->sync($todasCategorias);
 
         AuditoriaLog::create([
             'accion'     => 'CREÓ',
@@ -96,33 +106,41 @@ class PlantaAdminController extends Controller
     public function edit(Planta $planta)
     {
         $categorias = Categoria::with('subtemas')->orderBy('nombre')->get();
+        $planta->load('categorias');
         return view('admin.plantas.edit', compact('planta', 'categorias'));
     }
 
     public function update(Request $request, Planta $planta)
     {
         $data = $request->validate([
-            'nombre'        => 'required|string|max:150',
-            'cientifico'    => 'nullable|string|max:150',
-            'categoria_id'  => 'required|exists:categorias,id',
-            'subtema_id'    => 'required|exists:subtemas,id',
-            'uso'           => 'required|string|max:255',
-            'instrucciones' => 'required|string',
-            'contexto'      => 'nullable|string',
-            'relato'        => 'nullable|string',
-            'video_url'     => 'nullable|string|max:500',
-            'video_file'    => 'nullable|file|mimes:mp4,webm,ogv,avi|max:51200',
-            'borrar_video'  => 'nullable|boolean',
-            'imagen'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'borrar_imagen' => 'nullable|boolean',
-            'tags'          => 'nullable|string|max:300',
-            'verificada'    => 'boolean',
+            'nombre'               => 'required|string|max:150',
+            'cientifico'           => 'nullable|string|max:150',
+            'categoria_id'         => 'required|exists:categorias,id',
+            'categorias_extra'     => 'nullable|array',
+            'categorias_extra.*'   => 'exists:categorias,id',
+            'subtema_id'           => 'required|exists:subtemas,id',
+            'uso'                  => 'required|string|max:255',
+            'instrucciones'        => 'required|string',
+            'contexto'             => 'nullable|string',
+            'relato'               => 'nullable|string',
+            'video_url'            => 'nullable|string|max:500',
+            'video_file'           => 'nullable|file|mimes:mp4,webm,ogv,avi|max:51200',
+            'borrar_video'         => 'nullable|boolean',
+            'video_persona_nombre' => 'nullable|string|max:150',
+            'video_persona_rol'    => 'nullable|string|max:100',
+            'video_validado'       => 'boolean',
+            'imagen'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'borrar_imagen'        => 'nullable|boolean',
+            'tags'                 => 'nullable|string|max:300',
+            'verificada'           => 'boolean',
         ]);
 
-        $data['verificada'] = $request->boolean('verificada');
-        $data['video_url']  = $data['video_url'] ?: null;
+        $data['verificada']           = $request->boolean('verificada');
+        $data['video_validado']       = $request->boolean('video_validado');
+        $data['video_url']            = $data['video_url'] ?: null;
+        $data['video_persona_nombre'] = $data['video_persona_nombre'] ?? null;
+        $data['video_persona_rol']    = $data['video_persona_rol'] ?? null;
 
-        // Convertir URLs de YouTube watch a embed si es necesario
         if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
             $videoId = $this->extractYouTubeVideoId($data['video_url']);
             if ($videoId) {
@@ -130,26 +148,22 @@ class PlantaAdminController extends Controller
             }
         }
 
-        // Validar formato del video_url
         if ($data['video_url'] && !preg_match('/^(https?:\/\/|videos\/)/', $data['video_url'])) {
-            return back()->withErrors(['video_url' => 'La URL del video debe ser una URL externa válida o una ruta local que comience con "videos/".'])->withInput();
+            return back()->withErrors(['video_url' => 'La URL del video debe ser una URL externa válida.'])->withInput();
         }
 
-        // Procesar video: borrar existente, subir nuevo, o mantener actual
         if ($request->boolean('borrar_video')) {
             if ($planta->video_url && !str_starts_with($planta->video_url, 'http')) {
                 Storage::disk('public')->delete($planta->video_url);
             }
             $data['video_url'] = null;
         } elseif ($request->hasFile('video_file')) {
-            // Borrar video anterior si existe y no es URL externa
             if ($planta->video_url && !str_starts_with($planta->video_url, 'http')) {
                 Storage::disk('public')->delete($planta->video_url);
             }
             $data['video_url'] = $request->file('video_file')->store('videos', 'public');
         }
 
-        // Borrar imagen existente si se pidió o se sube una nueva
         if ($request->boolean('borrar_imagen') || $request->hasFile('imagen')) {
             if ($planta->img_path) {
                 Storage::disk('public')->delete($planta->img_path);
@@ -161,9 +175,14 @@ class PlantaAdminController extends Controller
             $data['img_path'] = $request->file('imagen')->store('plantas', 'public');
         }
 
-        unset($data['imagen'], $data['borrar_imagen']);
+        $categoriasExtra = $data['categorias_extra'] ?? [];
+        unset($data['imagen'], $data['borrar_imagen'], $data['categorias_extra']);
 
         $planta->update($data);
+
+        // Sincronizar categorías M2M
+        $todasCategorias = array_unique(array_merge([$data['categoria_id']], $categoriasExtra));
+        $planta->categorias()->sync($todasCategorias);
 
         AuditoriaLog::create([
             'accion'     => 'EDITÓ',

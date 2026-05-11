@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('title', 'Actividad (RF-05)')
-@section('admin-title', 'Actividad (RF-05)')
+@section('title', 'Actividad ')
+@section('admin-title', 'Actividad ')
 
 @section('content')
 
 <div class="tbl-card">
   <div class="tbl-hdr">
-    <h3>Registro de auditoría (RF-05)</h3>
+    <h3>Registro de auditoría </h3>
   </div>
 
   <table>

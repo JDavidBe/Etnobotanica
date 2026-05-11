@@ -39,9 +39,15 @@
             <div class="plant-no-img"><i class="fas fa-leaf"></i></div>
           @endif
           <div class="plant-info">
-            <span class="{{ $planta->verificada ? 'badge-v' : 'badge-p' }}">
-              {{ $planta->verificada ? 'Verificado' : 'Pendiente' }}
-            </span>
+            @if($planta->verificada)
+              <span class="badge-v" style="display:inline-flex;align-items:center;gap:4px">
+                <i class="fas fa-user-tie" style="font-size:.65rem"></i> Experto
+              </span>
+            @else
+              <span class="badge-p" style="display:inline-flex;align-items:center;gap:4px">
+                <i class="fas fa-users" style="font-size:.65rem"></i> Comunidad · Pendiente
+              </span>
+            @endif
             <div class="plant-nombre">{{ $planta->nombre }}</div>
             <div class="plant-cient">{{ $planta->cientifico }}</div>
             <div class="plant-uso">{{ $planta->uso }}</div>

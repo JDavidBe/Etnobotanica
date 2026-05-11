@@ -29,8 +29,15 @@ class Categoria extends Model
         return $this->hasMany(Subtema::class);
     }
 
+    // Legado FK directo
     public function plantas(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Planta::class);
+    }
+
+    // Muchos a muchos
+    public function plantasM2M(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Planta::class, 'categoria_planta');
     }
 }
