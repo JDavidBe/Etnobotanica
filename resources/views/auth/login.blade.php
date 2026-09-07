@@ -12,8 +12,8 @@
 
 <div class="login-card">
   <div class="login-logo"><i class="fas fa-leaf"></i></div>
-  <h2>Panel Admin</h2>
-  <p>Acceso para moderadores y administradores</p>
+  <h2>Login</h2>
+  <p>Hola, bienvenid@ de nuevo a tu cuenta</p>
 
   @if($errors->any())
     <div class="login-err show">

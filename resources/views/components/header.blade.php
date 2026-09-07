@@ -36,6 +36,13 @@
       <i class="fas fa-award"></i> Créditos
     </a>
 
+    {{-- Foro --}}
+    <a href="{{ route('foro.index') }}" class="btn-hdr"
+       style="background:transparent;color:var(--texto-nav,rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.25);font-size:.8rem"
+       title="Foro de la comunidad">
+      <i class="fas fa-comments"></i> Foro
+    </a>
+
     {{-- Botón Aportar: solo para rol lector --}}
     @auth
       @if(auth()->user()->hasRole('lector'))
