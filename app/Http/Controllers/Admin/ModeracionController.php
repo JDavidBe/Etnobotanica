@@ -18,11 +18,10 @@ class ModeracionController extends Controller
         $total        = $pendientes + $aprobados + $rechazados;
 
         // Aportes por mes (últimos 6 meses) para la gráfica
-        $porMes = Aporte::selectRaw("strftime('%Y-%m', creado_en) as mes, count(*) as total")
-            ->where('creado_en', '>=', now()->subMonths(6))
-            ->groupByRaw("strftime('%Y-%m', creado_en)")
-            ->orderBy('mes')
-            ->get();
+        $porMes = Aporte::all()
+            ->groupBy(fn($a) => $a->creado_en->format('Y-m'))
+            ->map(fn($grupo, $mes) => ['mes' => $mes, 'total' => $grupo->count()])
+            ->values();
 
         $estadoFiltro   = $request->query('estado');
         $estadosValidos = ['pendiente', 'aprobado', 'rechazado'];

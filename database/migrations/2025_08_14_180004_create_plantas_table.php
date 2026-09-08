@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('verificada')->default(false);
             $table->string('tags', 300)->default('');
             $table->timestamp('creado_en')->useCurrent();
-            $table->timestamp('actualizado_en')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamp('actualizado_en')->useCurrent();
         });
     }
 

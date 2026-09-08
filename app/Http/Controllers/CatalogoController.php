@@ -108,12 +108,12 @@ class CatalogoController extends Controller
         if (strlen($q) >= 2) {
             $plantas = Planta::with(['categoria', 'subtema'])
                 ->where(function ($query) use ($q) {
-                    $query->where('nombre',    'LIKE', "%{$q}%")
-                          ->orWhere('cientifico', 'LIKE', "%{$q}%")
-                          ->orWhere('uso',        'LIKE', "%{$q}%")
-                          ->orWhere('tags',       'LIKE', "%{$q}%")
+                    $query->whereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$q}%"])
+                          ->orWhereRaw('LOWER(cientifico) LIKE LOWER(?)', ["%{$q}%"])
+                          ->orWhereRaw('LOWER(uso) LIKE LOWER(?)', ["%{$q}%"])
+                          ->orWhereRaw('LOWER(tags) LIKE LOWER(?)', ["%{$q}%"])
                           ->orWhereHas('subtema', function ($subQuery) use ($q) {
-                              $subQuery->where('nombre', 'LIKE', "%{$q}%");
+                              $subQuery->whereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$q}%"]);
                           });
                 })
                 ->orderBy('nombre')
