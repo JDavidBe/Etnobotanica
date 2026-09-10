@@ -58,6 +58,7 @@ class PlantaAdminController extends Controller
             'verificada'           => 'boolean',
         ]);
 
+        $data['tags']                 = $data['tags'] ?? '';
         $data['cientifico']           = $data['cientifico'] ?? 'sp.';
         $data['verificada']           = $request->boolean('verificada');
         $data['video_validado']       = $request->boolean('video_validado');
@@ -65,7 +66,8 @@ class PlantaAdminController extends Controller
         $data['video_persona_nombre'] = $data['video_persona_nombre'] ?? null;
         $data['video_persona_rol']    = $data['video_persona_rol'] ?? null;
 
-        if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
+        
+if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
             $videoId = $this->extractYouTubeVideoId($data['video_url']);
             if ($videoId) {
                 $data['video_url'] = "https://www.youtube.com/embed/{$videoId}";
@@ -135,6 +137,7 @@ class PlantaAdminController extends Controller
             'verificada'           => 'boolean',
         ]);
 
+        $data['tags']                 = $data['tags'] ?? '';
         $data['verificada']           = $request->boolean('verificada');
         $data['video_validado']       = $request->boolean('video_validado');
         $data['video_url']            = $data['video_url'] ?: null;
