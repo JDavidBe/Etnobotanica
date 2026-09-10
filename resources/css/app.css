@@ -43,6 +43,7 @@
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+html, body { max-width: 100%; overflow-x: hidden; }
 body {
   font-family: 'Nunito', sans-serif;
   background: var(--bg);
@@ -50,6 +51,7 @@ body {
   min-height: 100vh;
   transition: background .35s, color .35s;
 }
+img, video { max-width: 100%; height: auto; }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--verde-mid); border-radius: 3px; }
@@ -148,6 +150,28 @@ a { text-decoration: none; color: inherit; }
 }
 .f-group textarea { resize: vertical; min-height: 90px; }
 
+.pass-wrap { position: relative; }
+.pass-wrap input { padding-right: 44px !important; }
+.pass-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: .92rem;
+  transition: var(--trans);
+}
+.pass-toggle:hover { color: var(--verde-mid); background: var(--pale); }
+
 .btn-submit {
   background: linear-gradient(135deg, var(--verde-mid), var(--verde-claro));
   color: #fff;
@@ -200,7 +224,7 @@ header {
   background: linear-gradient(135deg, var(--verde), var(--secondary));
   color: #fff;
   padding: 0 1.5rem;
-  height: 68px;
+  min-height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -208,6 +232,7 @@ header {
   top: 0;
   z-index: 900;
   box-shadow: 0 2px 14px rgba(0,0,0,.28);
+  border-bottom: 1px solid rgba(255,255,255,.08);
   gap: 12px;
 }
 
@@ -221,7 +246,9 @@ header {
   font-size: 1.15rem;
   color: var(--secondary);
   flex-shrink: 0;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
 }
+.marca-link:hover .marca-ico { transform: rotate(-14deg) scale(1.08); }
 .marca-txt strong { font-family: 'Lora', serif; font-size: 1.05rem; color: #fff; display: block; }
 .marca-txt span {
   display: block;
@@ -254,6 +281,7 @@ header {
 .search-wrap:focus-within {
   background: rgba(255,255,255,.2);
   border-color: var(--dorado-lt);
+  box-shadow: 0 0 0 3px rgba(212,175,55,.18);
 }
 .search-wrap input {
   background: none; border: none; outline: none;
@@ -264,8 +292,35 @@ header {
 .search-wrap input::placeholder { color: rgba(255,255,255,.4); }
 .search-wrap i { color: var(--dorado-lt); font-size: .8rem; }
 
-/* Right buttons */
-.hdr-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+/* Right side — agrupado en 4 bloques: navegación · acción · herramientas · cuenta */
+.hdr-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.hdr-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255,255,255,.18);
+  flex-shrink: 0;
+}
+
+/* Navegación (Créditos, Foro): enlaces discretos, no botones */
+.hdr-nav { display: flex; align-items: center; gap: 4px; }
+.nav-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: .8rem;
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  transition: var(--trans);
+  position: relative;
+}
+.nav-link i { font-size: .78rem; color: var(--dorado-lt); transition: transform .25s ease; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,.1); }
+.nav-link:hover i { transform: scale(1.15) rotate(-6deg); }
+
+/* Botones "pastilla" reutilizados en varias vistas */
 .btn-hdr {
   border: none;
   border-radius: 22px;
@@ -278,10 +333,31 @@ header {
   display: inline-flex; align-items: center; gap: 6px;
   text-decoration: none;
 }
-.btn-aportar { background: var(--dorado); color: var(--secondary); }
-.btn-aportar:hover { background: var(--dorado-lt); transform: translateY(-1px); }
+.btn-aportar {
+  background: var(--dorado); color: var(--secondary);
+  box-shadow: 0 0 0 0 rgba(212,175,55,.55);
+  animation: aportarPulso 2.6s ease-in-out infinite;
+}
+.btn-aportar:hover { background: var(--dorado-lt); transform: translateY(-1px); animation-play-state: paused; }
+@keyframes aportarPulso {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,.45); }
+  50%      { box-shadow: 0 0 0 7px rgba(212,175,55,0); }
+}
 .btn-admin { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.2); }
 .btn-admin:hover { background: rgba(255,255,255,.22); color: #fff; }
+.btn-lector { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.2); }
+.btn-lector:hover { background: rgba(255,255,255,.22); color: #fff; }
+
+/* Salir: discreto por defecto, solo se pone rojo al pasar el mouse */
+.btn-salir {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.18);
+}
+.btn-salir:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+/* Herramientas: tema + notificaciones */
+.hdr-tools { display: flex; align-items: center; gap: 8px; }
 
 .theme-btn {
   width: 36px; height: 36px;
@@ -295,11 +371,96 @@ header {
   transition: var(--trans);
   flex-shrink: 0;
 }
-.theme-btn:hover { background: rgba(255,255,255,.24); transform: rotate(22deg); }
+.theme-btn:hover { background: rgba(255,255,255,.24); transform: rotate(30deg) scale(1.06); }
 
-@media (max-width: 700px) {
-  .search-wrap { width: 160px; }
-  header { padding: 0 .9rem; }
+.notif-btn:hover { transform: scale(1.08); }
+.notif-btn:hover i { animation: campanazo .5s ease; }
+@keyframes campanazo {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-16deg); }
+  75%      { transform: rotate(16deg); }
+}
+
+/* Cuenta: Admin/Mis aportes + Salir */
+.hdr-account { display: flex; align-items: center; gap: 8px; }
+
+/* Burger + panel colapsable (móvil) */
+.hdr-burger {
+  display: none;
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hdr-burger:hover { background: rgba(255,255,255,.24); }
+
+.hdr-collapsible {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  header { padding: 0 .9rem; flex-wrap: wrap; }
+  .hdr-burger { display: flex; }
+
+  #hdr-bc.breadcrumbs {
+    flex-basis: 100%;
+    order: 3;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    padding-top: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hdr-collapsible {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    background: var(--secondary);
+    padding: 14px 16px 18px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    z-index: 895;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+  }
+  .hdr-collapsible.open { display: flex; }
+
+  .search-wrap { width: 100%; }
+
+  .hdr-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .hdr-divider { display: none; }
+  .hdr-nav, .hdr-tools, .hdr-account { width: 100%; flex-direction: column; align-items: stretch; gap: 8px; }
+  .hdr-right .nav-link {
+    width: 100%; justify-content: flex-start;
+    background: rgba(255,255,255,.06);
+    padding: 10px 12px; border-radius: 12px; font-size: .85rem;
+  }
+  .hdr-right .btn-hdr { width: 100%; justify-content: center; }
+  .hdr-tools { flex-direction: row; justify-content: flex-end; }
+}
+
+@media (max-width: 380px) {
+  .marca-txt span { display: none; }
 }
 /* ══ HERO ══ */
 .hero {
@@ -997,6 +1158,16 @@ tr:hover td { background: var(--pale); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ══ AVATAR REDONDO (usado en comentarios, foro y perfil) ══ */
+.com-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--verde), var(--verde-mid));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: .95rem;
+  overflow: hidden;
+}
+.com-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+
 /* ══ IMAGE UPLOAD WIDGET ══ */
 .img-upload-wrap {
   border: 2px dashed var(--verde-mid);
@@ -1048,4 +1219,3 @@ tr:hover td { background: var(--pale); }
 .img-remove-btn:hover { background: rgba(229,57,53,.85); }
 
 .img-actual-wrap { margin-bottom: 12px; }
-

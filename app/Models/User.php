@@ -15,6 +15,7 @@ class User extends Authenticatable
         'email',
         'password',
         'activo',
+        'avatar',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -26,6 +27,11 @@ class User extends Authenticatable
             'password'          => 'hashed',
             'activo'            => 'boolean',
         ];
+    }
+
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar ? asset('storage/' . $this->avatar) : null;
     }
 
     public function aportes(): \Illuminate\Database\Eloquent\Relations\HasMany

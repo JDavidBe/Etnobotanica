@@ -122,9 +122,12 @@
               <option value="admin">Administrador</option>
             </select>
           </div>
-          <div class="f-group">
+                    <div class="f-group">
             <label>Contraseña *</label>
-            <input type="password" name="password" placeholder="••••••••" required>
+            <div class="pass-wrap">
+              <input type="password" name="password" placeholder="••••••••" required>
+              <button type="button" class="pass-toggle" onclick="togglePassword(this)" tabindex="-1" aria-label="Mostrar contraseña"><i class="fas fa-eye"></i></button>
+            </div>
           </div>
         </div>
       </div>

@@ -31,10 +31,16 @@ class Planta extends Model
         if ($this->img_path) {
             return asset('storage/' . $this->img_path);
         }
-        if ($this->img_url) {
+
+        if (!$this->img_url) {
+            return null;
+        }
+
+        if (preg_match('#^(https?://|//)#i', $this->img_url)) {
             return $this->img_url;
         }
-        return null;
+
+        return asset($this->img_url);
     }
 
     // Categoría principal (FK legado)

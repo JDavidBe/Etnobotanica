@@ -16,74 +16,108 @@
   </div>
   @endif
 
-  <form action="{{ route('plantas.buscar') }}" method="GET" class="search-wrap">
-    <i class="fas fa-search"></i>
-    <input type="text"
-           name="q"
-           placeholder="Buscar planta…"
-           autocomplete="off">
-  </form>
+  {{-- Botón hamburguesa: solo visible en móvil (ver media query en app.css) --}}
+  <button class="hdr-burger" id="hdr-burger" onclick="toggleMobileMenu()" title="Menú" aria-label="Abrir menú" aria-expanded="false">
+    <i class="fas fa-bars"></i>
+  </button>
 
-  <div class="hdr-right">
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Claro / Oscuro">
-      <i class="fas fa-moon"></i>
-    </button>
+  {{-- Panel colapsable: en escritorio se muestra en línea, en móvil se oculta hasta pulsar la hamburguesa --}}
+  <div class="hdr-collapsible" id="hdr-collapsible">
 
-    {{-- Créditos --}}
-    <a href="{{ route('creditos') }}" class="btn-hdr"
-       style="background:transparent;color:var(--texto-nav,rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.25);font-size:.8rem"
-       title="Créditos del proyecto">
-      <i class="fas fa-award"></i> Créditos
-    </a>
+    <form action="{{ route('plantas.buscar') }}" method="GET" class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text"
+             name="q"
+             placeholder="Buscar planta…"
+             autocomplete="off">
+    </form>
 
-    {{-- Botón Aportar: solo para rol lector --}}
-    @auth
-      @if(auth()->user()->hasRole('lector'))
-        <a href="{{ route('aportar') }}" class="btn-hdr btn-aportar">
-          <i class="fas fa-plus"></i> Aportar
+    <div class="hdr-right">
+
+      <div class="hdr-nav">
+        {{-- Créditos --}}
+        <a href="{{ route('creditos') }}" class="nav-link" title="Créditos del proyecto">
+          <i class="fas fa-award"></i> Créditos
         </a>
-      @endif
-    @endauth
 
-    @auth
-      {{-- Campana de notificaciones --}}
-      <div class="notif-wrap" id="notif-wrap">
-        <button class="notif-btn" id="notif-btn" onclick="toggleNotifPanel()" title="Notificaciones">
-          <i class="fas fa-bell"></i>
-          <span class="notif-badge" id="notif-badge" style="display:none">0</span>
-        </button>
-        <div class="notif-panel" id="notif-panel" style="display:none">
-          <div class="notif-hdr">
-            <span>Notificaciones</span>
-            <button class="notif-mark-all" onclick="marcarTodasLeidas()">Marcar todas</button>
-          </div>
-          <div class="notif-lista" id="notif-lista">
-            <div class="notif-empty">Cargando…</div>
-          </div>
-        </div>
+        {{-- Foro --}}
+        <a href="{{ route('foro.index') }}" class="nav-link" title="Foro de la comunidad">
+          <i class="fas fa-comments"></i> Foro
+        </a>
       </div>
 
-      @if(auth()->user()->hasAnyRole(['admin', 'moderador']))
-        <a href="{{ route('admin.dashboard') }}" class="btn-hdr btn-admin">
-          <i class="fas fa-th-large"></i> Admin
-        </a>
-      @elseif(auth()->user()->hasRole('lector'))
-        <a href="{{ route('lector.dashboard') }}" class="btn-hdr btn-lector">
-          <i class="fas fa-seedling"></i> Mis aportes
-        </a>
-      @endif
+      <span class="hdr-divider"></span>
 
-      <form method="POST" action="{{ route('logout') }}" style="display:inline">
-        @csrf
-        <button type="submit" class="btn-hdr" title="Cerrar sesión" style="background:var(--rojo-light);color:white">
-          <i class="fas fa-sign-out-alt"></i> Salir
+      {{-- Botón Aportar: solo para rol lector --}}
+      @auth
+        @if(auth()->user()->hasRole('lector'))
+          <a href="{{ route('aportar') }}" class="btn-hdr btn-aportar">
+            <i class="fas fa-plus"></i> Aportar
+          </a>
+        @endif
+      @endauth
+
+      <div class="hdr-tools">
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Claro / Oscuro">
+          <i class="fas fa-moon"></i>
         </button>
-      </form>
-    @else
-      <a href="{{ route('login') }}" class="btn-hdr btn-admin">
-        <i class="fas fa-sign-in-alt"></i> Iniciar sesión
-      </a>
-    @endauth
+
+        @auth
+          {{-- Campana de notificaciones --}}
+          <div class="notif-wrap" id="notif-wrap">
+            <button class="notif-btn" id="notif-btn" onclick="toggleNotifPanel()" title="Notificaciones">
+              <i class="fas fa-bell"></i>
+              <span class="notif-badge" id="notif-badge" style="display:none">0</span>
+            </button>
+            <div class="notif-panel" id="notif-panel" style="display:none">
+              <div class="notif-hdr">
+                <span>Notificaciones</span>
+                <button class="notif-mark-all" onclick="marcarTodasLeidas()">Marcar todas</button>
+              </div>
+              <div class="notif-lista" id="notif-lista">
+                <div class="notif-empty">Cargando…</div>
+              </div>
+            </div>
+          </div>
+        @endauth
+      </div>
+
+      <span class="hdr-divider"></span>
+
+      @auth
+        <div class="hdr-account">
+          @if(auth()->user()->hasAnyRole(['admin', 'moderador']))
+            <a href="{{ route('admin.dashboard') }}" class="btn-hdr btn-admin">
+              <i class="fas fa-th-large"></i> Admin
+            </a>
+          @elseif(auth()->user()->hasRole('lector'))
+            <a href="{{ route('lector.dashboard') }}" class="btn-hdr btn-lector">
+              <i class="fas fa-seedling"></i> Mis aportes
+            </a>
+          @endif
+
+          <a href="{{ route('perfil.edit') }}" class="hdr-avatar-btn" title="Mi perfil">
+            @if(auth()->user()->avatarUrl())
+              <img src="{{ auth()->user()->avatarUrl() }}" alt="Mi perfil">
+            @else
+              <span>{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+            @endif
+          </a>
+
+          <form method="POST" action="{{ route('logout') }}" style="display:inline">
+            @csrf
+            <button type="submit" class="btn-hdr btn-salir" title="Cerrar sesión">
+              <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
+          </form>
+        </div>
+      @else
+        <a href="{{ route('login') }}" class="btn-hdr btn-admin">
+          <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </a>
+      @endauth
+
+    </div>
   </div>
 </header>
 
@@ -150,6 +184,19 @@
 .notif-fecha { font-size: .7rem; color: var(--texto-suave, #aaa); }
 .notif-dot { display: none; width: 8px; height: 8px; border-radius: 50%; background: var(--verde, #2e7d32); flex-shrink: 0; margin-top: 6px; }
 .notif-empty { padding: 32px; text-align: center; font-size: .85rem; color: var(--texto-suave, #999); }
+
+/* ── Ícono de avatar en el header ── */
+.hdr-avatar-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.3);
+  background: var(--dorado);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0; text-decoration: none;
+  transition: border-color .2s;
+  color: var(--secondary); font-weight: 800; font-size: .95rem;
+}
+.hdr-avatar-btn:hover { border-color: rgba(255,255,255,.7); }
+.hdr-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 </style>
 
 @auth

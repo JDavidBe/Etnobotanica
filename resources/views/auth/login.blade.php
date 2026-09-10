@@ -12,8 +12,8 @@
 
 <div class="login-card">
   <div class="login-logo"><i class="fas fa-leaf"></i></div>
-  <h2>Panel Admin</h2>
-  <p>Acceso para moderadores y administradores</p>
+  <h2>Login</h2>
+  <p>Hola, bienvenid@ de nuevo a tu cuenta</p>
 
   @if($errors->any())
     <div class="login-err show">
@@ -27,9 +27,12 @@
       <label>Correo electrónico</label>
       <input type="email" name="email" value="{{ old('email') }}" autofocus required>
     </div>
-    <div class="f-group" style="margin-bottom:22px">
+        <div class="f-group" style="margin-bottom:22px">
       <label>Contraseña</label>
-      <input type="password" name="password" required>
+      <div class="pass-wrap">
+        <input type="password" name="password" required>
+        <button type="button" class="pass-toggle" onclick="togglePassword(this)" tabindex="-1" aria-label="Mostrar contraseña"><i class="fas fa-eye"></i></button>
+      </div>
     </div>
     <button type="submit" class="btn-submit" style="width:100%;justify-content:center">
       <i class="fas fa-sign-in-alt"></i> Ingresar
@@ -40,6 +43,11 @@
      style="margin-top:13px;display:block;text-align:center;color:var(--texto-suave);font-size:.84rem;text-decoration:none">
     ← Volver al sitio
   </a>
+  
+  <a href="{{ route('register') }}"
+   style="margin-top:16px;display:block;text-align:center;color:var(--verde-mid);font-size:.84rem;text-decoration:none;font-weight:700">
+  ¿No tienes cuenta? Regístrate
+</a>
 </div>
 
 <script>

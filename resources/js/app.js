@@ -45,6 +45,52 @@ function toast(msg, tipo = '') {
 /* ── BUSCADOR ── */
 // Removido, ahora es un form simple
 
+/* ── MENÚ MÓVIL DEL HEADER ── */
+function toggleMobileMenu() {
+  const panel  = document.getElementById('hdr-collapsible');
+  const burger = document.getElementById('hdr-burger');
+  if (!panel || !burger) return;
+  const open = panel.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  burger.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+}
+window.toggleMobileMenu = toggleMobileMenu;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const panel  = document.getElementById('hdr-collapsible');
+  const burger = document.getElementById('hdr-burger');
+  if (!panel || !burger) return;
+
+  // Cerrar el panel móvil al hacer click en un enlace o botón dentro de él
+  panel.addEventListener('click', e => {
+    if (e.target.closest('a, button:not(#theme-btn):not(#notif-btn)')) {
+      panel.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+  });
+
+  // Si la ventana vuelve a tamaño de escritorio, resetear el estado del menú
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 860 && panel.classList.contains('open')) {
+      panel.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+  });
+});
+
+/* ── MOSTRAR / OCULTAR CONTRASEÑA ── */
+function togglePassword(btn) {
+  const input = btn.previousElementSibling;
+  if (!input) return;
+  const mostrar = input.type === 'password';
+  input.type = mostrar ? 'text' : 'password';
+  btn.innerHTML = mostrar ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+  btn.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+}
+window.togglePassword = togglePassword;
+
 /* ── MODALES ── */
 function abrirModal(id) { document.getElementById(id)?.classList.add('open'); }
 function cerrarModal(id) { document.getElementById(id)?.classList.remove('open'); }
