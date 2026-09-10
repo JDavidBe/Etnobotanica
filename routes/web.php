@@ -6,6 +6,7 @@ use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ForoController;
 use App\Http\Controllers\LectorController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AuditoriaController;
 use App\Http\Controllers\Admin\CategoriaAdminController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [CatalogoController::class, 'home'])->name('home');
 
 Route::get('/creditos', fn() => view('public.creditos'))->name('creditos');
+
+Route::get('/terminos-y-condiciones', fn() => view('public.terminos'))->name('terminos');
 
 Route::get('/catalogo', [CatalogoController::class, 'catalogo'])->name('catalogo');
 
@@ -64,6 +67,13 @@ Route::middleware(['auth', 'role:lector'])->prefix('mis-aportes')->name('lector.
     Route::get('/',                [LectorController::class, 'dashboard'])->name('dashboard');
     Route::get('/{aporte}/editar', [LectorController::class, 'edit'])->name('aporte.edit');
     Route::put('/{aporte}',        [LectorController::class, 'update'])->name('aporte.update');
+});
+
+// Perfil de usuario (cualquier rol logueado)
+Route::middleware('auth')->prefix('perfil')->name('perfil.')->group(function () {
+    Route::get('/',          [ProfileController::class, 'edit'])->name('edit');
+    Route::put('/',          [ProfileController::class, 'update'])->name('update');
+    Route::put('/password',  [ProfileController::class, 'updatePassword'])->name('password');
 });
 
 // Notificaciones (auth)
