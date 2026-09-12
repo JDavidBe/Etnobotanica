@@ -58,16 +58,15 @@ class PlantaAdminController extends Controller
             'verificada'           => 'boolean',
         ]);
 
-        $data['tags']                 = $data['tags'] ?? '';
         $data['cientifico']           = $data['cientifico'] ?? 'sp.';
         $data['verificada']           = $request->boolean('verificada');
         $data['video_validado']       = $request->boolean('video_validado');
         $data['video_url']            = $data['video_url'] ?: null;
         $data['video_persona_nombre'] = $data['video_persona_nombre'] ?? null;
         $data['video_persona_rol']    = $data['video_persona_rol'] ?? null;
+        $data['tags']                 = $data['tags'] ?? '';
 
-        
-if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
+        if ($data['video_url'] && preg_match('/(youtube\.com|youtu\.be)/', $data['video_url'])) {
             $videoId = $this->extractYouTubeVideoId($data['video_url']);
             if ($videoId) {
                 $data['video_url'] = "https://www.youtube.com/embed/{$videoId}";
@@ -137,14 +136,14 @@ if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=
             'verificada'           => 'boolean',
         ]);
 
-        $data['tags']                 = $data['tags'] ?? '';
         $data['verificada']           = $request->boolean('verificada');
         $data['video_validado']       = $request->boolean('video_validado');
         $data['video_url']            = $data['video_url'] ?: null;
         $data['video_persona_nombre'] = $data['video_persona_nombre'] ?? null;
         $data['video_persona_rol']    = $data['video_persona_rol'] ?? null;
+        $data['tags']                 = $data['tags'] ?? '';
 
-        if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=')) {
+        if ($data['video_url'] && preg_match('/(youtube\.com|youtu\.be)/', $data['video_url'])) {
             $videoId = $this->extractYouTubeVideoId($data['video_url']);
             if ($videoId) {
                 $data['video_url'] = "https://www.youtube.com/embed/{$videoId}";
@@ -224,7 +223,7 @@ if ($data['video_url'] && str_contains($data['video_url'], 'youtube.com/watch?v=
 
     private function extractYouTubeVideoId($url)
     {
-        $pattern = '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/';
+        $pattern = '/(?:youtube\.com\/watch\?v=|youtube\.com\/shorts\/|youtu\.be\/)([a-zA-Z0-9_-]{11})/';
         if (preg_match($pattern, $url, $matches)) {
             return $matches[1];
         }
