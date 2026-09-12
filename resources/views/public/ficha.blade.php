@@ -69,7 +69,7 @@
           @endif
         @endif
 
-        @if(str_starts_with($planta->video_url, 'http'))
+        @if(str_contains($planta->video_url, 'youtube.com/embed'))
           <div class="video-wrap" style="position:relative">
             <iframe src="{{ $planta->video_url }}" allowfullscreen></iframe>
             {{-- Overlay nombre/rol --}}
@@ -88,7 +88,7 @@
         @else
           <div style="position:relative;border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra-lg)">
             <video controls style="width:100%;display:block" preload="metadata">
-              <source src="{{ asset($planta->video_url) }}">
+              <source src="{{ $planta->video_url }}">
             </video>
             @if($planta->video_persona_nombre)
               <div class="video-overlay-credito">

@@ -103,9 +103,9 @@
       {{-- Imagen --}}
       <div class="f-group">
         <label>Imagen de la planta <span style="font-weight:400;font-size:.8rem;color:var(--texto-suave)">(JPG, PNG, WEBP — máx. 4 MB)</span></label>
-        @if($planta->img_path)
+        @if($planta->imagenUrl)
           <div class="img-actual-wrap" id="img-actual">
-            <img src="{{ asset('storage/' . $planta->img_path) }}" alt="{{ $planta->nombre }}"
+            <img src="{{ $planta->imagenUrl }}" alt="{{ $planta->nombre }}"
                  style="max-height:160px;border-radius:10px;object-fit:cover">
             <label style="display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer;font-size:.85rem;color:var(--rojo,#e53935)">
               <input type="checkbox" name="borrar_imagen" value="1" id="chk-borrar"
@@ -119,7 +119,7 @@
         <div class="img-upload-wrap" id="img-upload-wrap-edit">
           <label for="imagen-edit" class="img-upload-label" id="img-upload-label-edit">
             <i class="fas fa-cloud-upload-alt"></i>
-            <span>{{ $planta->img_path ? 'Sube una imagen de reemplazo' : 'Haz clic o arrastra una imagen aquí' }}</span>
+            <span>{{ $planta->imagenUrl ? 'Sube una imagen de reemplazo' : 'Haz clic o arrastra una imagen aquí' }}</span>
           </label>
           <input type="file" name="imagen" id="imagen-edit"
                  accept="image/jpeg,image/png,image/webp"
@@ -132,7 +132,7 @@
             </button>
           </div>
         </div>
-        @if($planta->img_path)
+        @if($planta->imagenUrl)
           </div>
         @endif
       </div>

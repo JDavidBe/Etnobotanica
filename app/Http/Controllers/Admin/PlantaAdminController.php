@@ -78,11 +78,16 @@ class PlantaAdminController extends Controller
         }
 
         if ($request->hasFile('video_file')) {
-            $data['video_url'] = $request->file('video_file')->store('videos', 'public');
+            $data['video_url'] = \App\Services\CloudinaryUploader::upload(
+                $request->file('video_file'), 'video', 'etnobotanica/videos'
+            );
         }
 
         if ($request->hasFile('imagen')) {
-            $data['img_path'] = $request->file('imagen')->store('plantas', 'public');
+            $data['img_url']  = \App\Services\CloudinaryUploader::upload(
+                $request->file('imagen'), 'image', 'etnobotanica/plantas'
+            );
+            $data['img_path'] = null;
         }
 
         $categoriasExtra = $data['categorias_extra'] ?? [];
@@ -163,7 +168,9 @@ class PlantaAdminController extends Controller
             if ($planta->video_url && !str_starts_with($planta->video_url, 'http')) {
                 Storage::disk('public')->delete($planta->video_url);
             }
-            $data['video_url'] = $request->file('video_file')->store('videos', 'public');
+            $data['video_url'] = \App\Services\CloudinaryUploader::upload(
+                $request->file('video_file'), 'video', 'etnobotanica/videos'
+            );
         }
 
         if ($request->boolean('borrar_imagen') || $request->hasFile('imagen')) {
@@ -171,10 +178,13 @@ class PlantaAdminController extends Controller
                 Storage::disk('public')->delete($planta->img_path);
             }
             $data['img_path'] = null;
+            $data['img_url']  = null;
         }
 
         if ($request->hasFile('imagen')) {
-            $data['img_path'] = $request->file('imagen')->store('plantas', 'public');
+            $data['img_url'] = \App\Services\CloudinaryUploader::upload(
+                $request->file('imagen'), 'image', 'etnobotanica/plantas'
+            );
         }
 
         $categoriasExtra = $data['categorias_extra'] ?? [];
