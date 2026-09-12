@@ -77,7 +77,7 @@
               <input type="checkbox" name="categorias_extra[]" value="{{ $cat->id }}"
                      {{ in_array($cat->id, old('categorias_extra', [])) ? 'checked' : '' }}
                      style="width:14px;height:14px;accent-color:var(--verde-mid)">
-              {{ $cat->icono ? '<i class="'.$cat->icono.'"></i>' : '' }} {{ $cat->nombre }}
+              {!! $cat->icono ? '<i class="'.$cat->icono.'"></i>' : '' !!} {{ $cat->nombre }}
             </label>
           @endforeach
         </div>
