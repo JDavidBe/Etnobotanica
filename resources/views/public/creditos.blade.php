@@ -44,6 +44,8 @@
   <div class="cred-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:32px">
     @php
     $equipo = [
+      ['nombre'=>'Juan David Bernal Beltrán', 'rol'=>'Desarrollo', 'correo'=>'juandavidbernal@ucundinamarca.edu.co','icono'=>'fas fa-code', 'color'=>'#2e7d32'],
+      ['nombre'=>'Johan Steven Álvarez Rodríguez', 'rol'=>'Desarrollo', 'correo'=>'jstevenalvarez@ucundinamarca.edu.co','icono'=>'fas fa-code', 'color'=>'#00897b'],
       ['nombre'=>'Johan Estiven Leal Mora', 'rol'=>'Desarrollo Backend', 'correo'=>'jeleal@udecundinamarca.edu.co','icono'=>'fas fa-server', 'color'=>'#1565c0'],
       ['nombre'=>'Jhordy Santiago Miranda García', 'rol'=>'Arquitectura & Base de datos', 'correo'=>'jsmiranda@ucundinamarca.edu.co', 'icono'=>'fas fa-database', 'color'=>'#6a1b9a']
     ]
@@ -122,8 +124,9 @@
   <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px">
     @php
     $techs = [
-      'Laravel 12','PHP 8.3','PostgreSQL','Spatie Permissions',
-      'Blade','Tailwind-like CSS','Alpine.js','Chart.js','HTMX',
+      'Laravel 13','PHP 8.3','PostgreSQL','Spatie Permissions',
+      'Blade','Tailwind CSS 4','Alpine.js','Chart.js','HTMX',
+      'Docker','Nginx','Cloudinary','Render',
     ];
     @endphp
     @foreach($techs as $tech)
