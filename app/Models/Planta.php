@@ -15,7 +15,8 @@ class Planta extends Model
         'nombre', 'cientifico', 'categoria_id', 'subtema_id',
         'uso', 'instrucciones', 'contexto', 'relato',
         'video_url', 'video_persona_nombre', 'video_persona_rol', 'video_validado',
-        'img_url', 'img_path', 'verificada', 'tags',
+        'reino', 'division', 'clase', 'orden', 'familia', 'genero', 'taxonomia_nota', 'descripcion',
+        'img_url', 'img_path', 'foto_referencia_url', 'verificada', 'tags',
     ];
 
     protected function casts(): array
@@ -41,6 +42,37 @@ class Planta extends Model
         }
 
         return asset($this->img_url);
+    }
+
+
+    /**
+     * Clasificación taxonómica completa, en el orden jerárquico estándar
+     * (Reino → División → Clase → Orden → Familia → Género → Especie),
+     * lista para recorrer en la vista. La Especie toma el valor de
+     * `cientifico`. Los niveles sin dato quedan en null (se muestran
+     * como "No determinado" en la vista).
+     */
+    public function getTaxonomiaAttribute(): array
+    {
+        return [
+            'Reino'    => $this->reino,
+            'División' => $this->division,
+            'Clase'    => $this->clase,
+            'Orden'    => $this->orden,
+            'Familia'  => $this->familia,
+            'Género'   => $this->genero,
+            'Especie'  => $this->cientifico ?: null,
+        ];
+    }
+
+    /**
+     * True si tiene al menos un nivel taxonómico registrado (más allá
+     * del Reino), es decir, si la identificación no quedó totalmente
+     * indeterminada.
+     */
+    public function getTaxonomiaDeterminadaAttribute(): bool
+    {
+        return (bool) ($this->clase || $this->orden || $this->familia || $this->genero);
     }
 
     // Categoría principal (FK legado)

@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             CategoriasSeeder::class,
             SubtemasSeeder::class,
             PlantasSeeder::class,
+            EnciclopediaPlantasSeeder::class,
+            PlantasSumapazUsoSeeder::class,
             AuditoriaLogSeeder::class,
         ]);
     }

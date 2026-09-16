@@ -52,7 +52,13 @@
       @else
         <div class="ficha-no-img">
           <i class="fas fa-leaf"></i>
-          <p>Sin imagen disponible</p>
+          <p>Sin imagen propia disponible</p>
+          @if($planta->foto_referencia_url)
+            <a href="{{ $planta->foto_referencia_url }}" target="_blank" rel="noopener"
+               style="margin-top:10px;font-size:.82rem;display:inline-flex;align-items:center;gap:6px;color:var(--dorado)">
+              <i class="fas fa-external-link-alt"></i> Ver fotografías libres (Wikimedia Commons)
+            </a>
+          @endif
         </div>
       @endif
     </div>
@@ -143,6 +149,46 @@
       </div>
     </div>
 
+    {{-- Clasificación taxonómica: Reino → División → Clase → Orden → Familia → Género → Especie --}}
+    <div class="info-card taxonomia-card">
+      <h3><i class="fas fa-dna"></i> Clasificación taxonómica</h3>
+
+      @if(!$planta->taxonomia_determinada && !$planta->genero)
+        <p class="tax-aviso">
+          <i class="fas fa-triangle-exclamation"></i>
+          Identificación taxonómica no confirmada para el nombre común reportado.
+        </p>
+      @endif
+
+      <dl class="taxonomia-lista">
+        @foreach($planta->taxonomia as $nivel => $valor)
+          <div class="tax-fila">
+            <dt>{{ $nivel }}</dt>
+            <dd @class(['tax-especie' => $nivel === 'Especie'])>
+              @if($valor)
+                <em>{{ $valor }}</em>
+              @else
+                <span class="tax-nd">No determinado</span>
+              @endif
+            </dd>
+          </div>
+        @endforeach
+      </dl>
+
+      @if($planta->taxonomia_nota)
+        <p class="tax-nota">
+          <i class="fas fa-circle-info"></i> {{ $planta->taxonomia_nota }}
+        </p>
+      @endif
+    </div>
+
+    @if($planta->descripcion)
+      <div class="info-card">
+        <h3><i class="fas fa-book-open"></i> Descripción</h3>
+        <p>{{ $planta->descripcion }}</p>
+      </div>
+    @endif
+
     <div class="info-card">
       <h3><i class="fas fa-tags"></i> Categorización y usos</h3>
       <div class="usos-pills">
@@ -216,6 +262,88 @@
   font-size:.78rem;
   opacity:.85;
   font-style:italic;
+}
+
+.taxonomia-card .taxonomia-lista {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  margin:0;
+}
+.taxonomia-card .tax-fila {
+  display:grid;
+  grid-template-columns:140px 1fr;
+  align-items:center;
+  gap:14px;
+  padding:12px 14px;
+  border-radius:8px;
+}
+.taxonomia-card .tax-fila:nth-child(odd) {
+  background:var(--bg-input);
+}
+.taxonomia-card dt {
+  font-size:.72rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--dorado);
+}
+.taxonomia-card dd {
+  margin:0;
+  font-size:1rem;
+  font-weight:500;
+  color:var(--texto);
+  line-height:1.3;
+  word-break:break-word;
+}
+.taxonomia-card dd em {
+  font-style:italic;
+}
+.taxonomia-card dd.tax-especie {
+  font-size:1.08rem;
+}
+.taxonomia-card dd.tax-especie em {
+  font-weight:700;
+  color:var(--verde-claro);
+}
+.taxonomia-card .tax-nd {
+  color:var(--texto-suave);
+  font-style:italic;
+  font-weight:400;
+}
+.taxonomia-card .tax-nota,
+.taxonomia-card .tax-aviso {
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin:14px 0 0;
+  font-size:.85rem;
+  line-height:1.55;
+  border-radius:10px;
+  padding:10px 14px;
+}
+.taxonomia-card .tax-nota {
+  color:var(--texto-mid);
+  background:var(--pale);
+  border:1px solid var(--border);
+}
+.taxonomia-card .tax-aviso {
+  color:var(--dorado-lt);
+  background:rgba(212,175,55,.12);
+  border:1px solid rgba(212,175,55,.4);
+  font-weight:600;
+}
+.taxonomia-card .tax-aviso i,
+.taxonomia-card .tax-nota i {
+  margin-top:2px;
+  flex-shrink:0;
+}
+@media (max-width: 520px) {
+  .taxonomia-card .tax-fila {
+    grid-template-columns:1fr;
+    gap:2px;
+    padding:10px 12px;
+  }
 }
 </style>
 
