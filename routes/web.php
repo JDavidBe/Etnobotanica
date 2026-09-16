@@ -133,24 +133,12 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
 require __DIR__.'/auth.php';
 
 Route::get('/diagnostico-xyz123', function () {
-    $catId = DB::table('categorias')->where('nombre', 'Enciclopedia Botánica')->value('id');
-    $resultado = [
-        'categoria_id_encontrado' => $catId,
-    ];
+    \Artisan::call('db:seed', ['--class' => 'EnciclopediaPlantasSeeder', '--force' => true]);
+    $salida = \Artisan::output();
+    $totalPlantas = DB::table('plantas')->where('subtema_id', 9)->count();
 
-    try {
-        DB::table('subtemas')->updateOrInsert(
-            ['categoria_id' => $catId, 'nombre' => 'Catálogo Taxonómico'],
-            ['creado_en' => now()]
-        );
-        $resultado['insert_manual'] = 'OK, se inserto/actualizo sin error';
-    } catch (\Throwable $e) {
-        $resultado['insert_manual'] = 'ERROR: ' . $e->getMessage();
-    }
-
-    $resultado['subtemas_categoria_4'] = DB::table('subtemas')
-        ->where('categoria_id', 4)
-        ->get();
-
-    return response()->json($resultado);
+    return response()->json([
+        'salida_comando' => $salida,
+        'total_plantas_enciclopedia' => $totalPlantas,
+    ]);
 });
