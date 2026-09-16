@@ -1219,3 +1219,56 @@ tr:hover td { background: var(--pale); }
 .img-remove-btn:hover { background: rgba(229,57,53,.85); }
 
 .img-actual-wrap { margin-bottom: 12px; }
+
+/* ══ PAGINACIÓN ══ */
+.pagina-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pagina-btn,
+.pagina-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-lt);
+  background: var(--bg-card);
+  color: var(--texto);
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.pagina-btn {
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: .85rem;
+}
+.pagina-btn:hover:not(.disabled) {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+}
+.pagina-btn.disabled { opacity: .4; cursor: default; }
+.pagina-nums { display: flex; gap: 5px; }
+.pagina-num {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: .85rem;
+}
+.pagina-num:hover { background: var(--bg-input); }
+.pagina-num.activa {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+  font-weight: 600;
+}
+.pagina-dots { padding: 0 4px; color: var(--texto-suave); }
+.pagina-info {
+  text-align: center;
+  margin-top: 10px;
+  font-size: .8rem;
+  color: var(--texto-suave);
+}
