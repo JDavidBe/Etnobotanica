@@ -131,14 +131,3 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
    pero se deja el login manual por si acaso)
 ══════════════════════════════════════════════ */
 require __DIR__.'/auth.php';
-
-Route::get('/diagnostico-xyz123', function () {
-    \Artisan::call('db:seed', ['--class' => 'EnciclopediaPlantasSeeder', '--force' => true]);
-    $salida = \Artisan::output();
-    $totalPlantas = DB::table('plantas')->where('subtema_id', 9)->count();
-
-    return response()->json([
-        'salida_comando' => $salida,
-        'total_plantas_enciclopedia' => $totalPlantas,
-    ]);
-});
