@@ -131,11 +131,3 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
    pero se deja el login manual por si acaso)
 ══════════════════════════════════════════════ */
 require __DIR__.'/auth.php';
-
-Route::get('/fix-video-xyz123', function () {
-    $actualizadas = \DB::table('plantas')
-        ->where('video_url', 'https://www.youtube.com/embed/dQw4w9WgXcQ')
-        ->update(['video_url' => null]);
-
-    return response()->json(['plantas_corregidas' => $actualizadas]);
-});
