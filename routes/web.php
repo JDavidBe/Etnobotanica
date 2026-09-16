@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ModeracionController;
 use App\Http\Controllers\Admin\PlantaAdminController;
 use App\Http\Controllers\Admin\SubtemaAdminController;
 use App\Http\Controllers\Admin\UsuarioAdminController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /* ══════════════════════════════════════════════
@@ -130,3 +131,13 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
    pero se deja el login manual por si acaso)
 ══════════════════════════════════════════════ */
 require __DIR__.'/auth.php';
+
+Route::get('/diagnostico-xyz123', function () {
+    $categorias = DB::table('categorias')->get(['id', 'nombre']);
+    $subtemas = DB::table('subtemas')->get(['id', 'categoria_id', 'nombre']);
+
+    return response()->json([
+        'categorias' => $categorias,
+        'subtemas' => $subtemas,
+    ]);
+});
