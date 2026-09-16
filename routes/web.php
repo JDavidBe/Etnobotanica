@@ -133,11 +133,24 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
 require __DIR__.'/auth.php';
 
 Route::get('/diagnostico-xyz123', function () {
-    $categorias = DB::table('categorias')->get(['id', 'nombre']);
-    $subtemas = DB::table('subtemas')->get(['id', 'categoria_id', 'nombre']);
+    $catId = DB::table('categorias')->where('nombre', 'Enciclopedia Botánica')->value('id');
+    $resultado = [
+        'categoria_id_encontrado' => $catId,
+    ];
 
-    return response()->json([
-        'categorias' => $categorias,
-        'subtemas' => $subtemas,
-    ]);
+    try {
+        DB::table('subtemas')->updateOrInsert(
+            ['categoria_id' => $catId, 'nombre' => 'Catálogo Taxonómico'],
+            ['creado_en' => now()]
+        );
+        $resultado['insert_manual'] = 'OK, se inserto/actualizo sin error';
+    } catch (\Throwable $e) {
+        $resultado['insert_manual'] = 'ERROR: ' . $e->getMessage();
+    }
+
+    $resultado['subtemas_categoria_4'] = DB::table('subtemas')
+        ->where('categoria_id', 4)
+        ->get();
+
+    return response()->json($resultado);
 });
