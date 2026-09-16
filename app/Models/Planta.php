@@ -13,9 +13,9 @@ class Planta extends Model
 
     protected $fillable = [
         'nombre', 'cientifico', 'categoria_id', 'subtema_id',
+        'reino', 'division', 'clase', 'orden', 'familia', 'genero', 'taxonomia_nota', 'descripcion',
         'uso', 'instrucciones', 'contexto', 'relato',
         'video_url', 'video_persona_nombre', 'video_persona_rol', 'video_validado',
-        'reino', 'division', 'clase', 'orden', 'familia', 'genero', 'taxonomia_nota', 'descripcion',
         'img_url', 'img_path', 'foto_referencia_url', 'verificada', 'tags',
     ];
 
@@ -26,24 +26,6 @@ class Planta extends Model
             'video_validado' => 'boolean',
         ];
     }
-
-    public function getImagenUrlAttribute(): ?string
-    {
-        if ($this->img_path) {
-            return asset('storage/' . $this->img_path);
-        }
-
-        if (!$this->img_url) {
-            return null;
-        }
-
-        if (preg_match('#^(https?://|//)#i', $this->img_url)) {
-            return $this->img_url;
-        }
-
-        return asset($this->img_url);
-    }
-
 
     /**
      * Clasificación taxonómica completa, en el orden jerárquico estándar
@@ -73,6 +55,23 @@ class Planta extends Model
     public function getTaxonomiaDeterminadaAttribute(): bool
     {
         return (bool) ($this->clase || $this->orden || $this->familia || $this->genero);
+    }
+
+    public function getImagenUrlAttribute(): ?string
+    {
+        if ($this->img_path) {
+            return asset('storage/' . $this->img_path);
+        }
+
+        if (!$this->img_url) {
+            return null;
+        }
+
+        if (preg_match('#^(https?://|//)#i', $this->img_url)) {
+            return $this->img_url;
+        }
+
+        return asset($this->img_url);
     }
 
     // Categoría principal (FK legado)

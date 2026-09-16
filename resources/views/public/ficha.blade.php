@@ -149,6 +149,25 @@
       </div>
     </div>
 
+    <div class="info-card">
+      <h3><i class="fas fa-tags"></i> Categorización y usos</h3>
+      <div class="usos-pills">
+        {{-- Todas las categorías (M2M) --}}
+        @forelse($planta->categorias as $cat)
+          <span class="uso-pill"><i class="fas fa-folder" style="font-size:.7rem"></i> {{ $cat->nombre }}</span>
+        @empty
+          <span class="uso-pill"><i class="fas fa-folder" style="font-size:.7rem"></i> {{ $planta->categoria->nombre }}</span>
+        @endforelse
+        <span class="uso-pill"><i class="fas fa-tag" style="font-size:.7rem"></i> {{ $planta->subtema->nombre }}</span>
+        <span class="uso-pill main">{{ $planta->uso }}</span>
+        @if($planta->tags)
+          @foreach(explode(',', $planta->tags) as $tag)
+            <span class="uso-pill">{{ trim($tag) }}</span>
+          @endforeach
+        @endif
+      </div>
+    </div>
+
     {{-- Clasificación taxonómica: Reino → División → Clase → Orden → Familia → Género → Especie --}}
     <div class="info-card taxonomia-card">
       <h3><i class="fas fa-dna"></i> Clasificación taxonómica</h3>
@@ -188,25 +207,6 @@
         <p>{{ $planta->descripcion }}</p>
       </div>
     @endif
-
-    <div class="info-card">
-      <h3><i class="fas fa-tags"></i> Categorización y usos</h3>
-      <div class="usos-pills">
-        {{-- Todas las categorías (M2M) --}}
-        @forelse($planta->categorias as $cat)
-          <span class="uso-pill"><i class="fas fa-folder" style="font-size:.7rem"></i> {{ $cat->nombre }}</span>
-        @empty
-          <span class="uso-pill"><i class="fas fa-folder" style="font-size:.7rem"></i> {{ $planta->categoria->nombre }}</span>
-        @endforelse
-        <span class="uso-pill"><i class="fas fa-tag" style="font-size:.7rem"></i> {{ $planta->subtema->nombre }}</span>
-        <span class="uso-pill main">{{ $planta->uso }}</span>
-        @if($planta->tags)
-          @foreach(explode(',', $planta->tags) as $tag)
-            <span class="uso-pill">{{ trim($tag) }}</span>
-          @endforeach
-        @endif
-      </div>
-    </div>
 
     <div class="info-card">
       <h3><i class="fas fa-mortar-pestle"></i> Instrucciones de preparación</h3>
