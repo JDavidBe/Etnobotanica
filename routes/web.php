@@ -131,3 +131,14 @@ Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin')->name('admi
    pero se deja el login manual por si acaso)
 ══════════════════════════════════════════════ */
 require __DIR__.'/auth.php';
+
+Route::get('/run-sumapaz-seeder-xyz789', function () {
+    \Illuminate\Support\Facades\Artisan::call('db:seed', [
+        '--class' => 'Database\\Seeders\\PlantasSumapazUsoSeeder',
+        '--force' => true,
+    ]);
+
+    return response()->json([
+        'salida' => \Illuminate\Support\Facades\Artisan::output(),
+    ]);
+});
