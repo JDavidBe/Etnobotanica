@@ -35,6 +35,9 @@ header {
   font-weight: 300;
 }
 
+.hdr-escudo { display: flex; align-items: center; flex-shrink: 0; }
+.hdr-escudo img { height: 44px; width: auto; display: block; }
+
 /* Breadcrumbs */
 .breadcrumbs {
   display: flex; align-items: center; gap: 6px;

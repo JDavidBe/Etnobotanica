@@ -9,6 +9,10 @@
     </a>
   </div>
 
+  <div class="hdr-escudo" title="Universidad de Cundinamarca">
+    <img src="{{ asset('img/escudo-udec.png') }}" alt="Escudo Universidad de Cundinamarca">
+  </div>
+
   @hasSection('breadcrumbs')
   <div id="hdr-bc" class="breadcrumbs">
     <a href="{{ route('home') }}" class="crumb"><i class="fas fa-home"></i> Inicio</a>

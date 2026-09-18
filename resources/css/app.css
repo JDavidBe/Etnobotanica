@@ -259,6 +259,9 @@ header {
   font-weight: 300;
 }
 
+.hdr-escudo { display: flex; align-items: center; flex-shrink: 0; }
+.hdr-escudo img { height: 44px; width: auto; display: block; }
+
 /* Breadcrumbs */
 .breadcrumbs {
   display: flex; align-items: center; gap: 6px;
@@ -411,6 +414,7 @@ header {
 @media (max-width: 860px) {
   header { padding: 0 .9rem; flex-wrap: wrap; }
   .hdr-burger { display: flex; }
+  .hdr-escudo { display: none; }
 
   #hdr-bc.breadcrumbs {
     flex-basis: 100%;
