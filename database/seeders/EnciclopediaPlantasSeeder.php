@@ -1287,7 +1287,63 @@ class EnciclopediaPlantasSeeder extends Seeder
             ],
         ];
 
+        $usos = [
+            'Insulina' => 'Control de azúcar',
+            'Pepa de Nuero (Pepa de Neuro)' => 'Fortalecer el sistema inmunológico',
+            'Nopal' => 'Dolor de espolón y dolores musculares',
+            'Melisa' => 'Tranquilizante, regulación del ciclo menstrual',
+            'Enebro' => 'Medicinal',
+            'Orégano' => 'Antibiótico, alimenticio; Medicinal, cólicos',
+            'Pulmonaria' => 'Enfermedades pulmonares, asma, tos, bronquitis',
+            'Anís' => 'Alimento, medicinal, problemas digestivos',
+            'Yerbabuena' => 'Medicinal: enfermedades pulmonares y ampollas bucales (aftas)',
+            'Cola de caballo' => 'Para los riñones',
+            'Paico' => 'Medicinal; Medicinal, purgante',
+            'Caléndula' => 'Medicinal, cosmético',
+            'Cannabis' => 'Medicinal',
+            'Coca' => 'Medicinal',
+            'Tabaco' => 'Religioso/espiritual',
+            'Cilantrón o Cimarrón' => 'Medicinal (hepatitis); alimenticio, condimento',
+            'Jengibre' => 'Medicinal (resfriado), condimento',
+            'Romero' => 'Medicinal, condimento, cosmético (para las canas)',
+            'Ramio' => 'Alimentación animal',
+            'Mejorana' => 'Medicinal, combate el insomnio, usada para las migrañas; Medicinal, tranquilizante',
+            'Tres cogollos' => 'Medicinal, reportado como antiofídico, vasodilatador y anticoagulante (uso no verificado)',
+            'Aulaga / Arantú / Malamadre' => 'Medicinal, digestiva. Reportada por la comunidad para tratar tumores cancerígenos (uso no verificado)',
+            'Ruda' => 'Medicinal, calma el dolor de estómago y los cólicos (reportado como "La Ruda"); Medicinal, dolor de cabeza (reportado como "Ruda Castilla")',
+            'Verbena (Berbena)' => 'Medicinal, control de la fiebre; Medicinal, purgante',
+            'Aliso' => 'Ambiental, conservación de agua',
+            'Sauce' => 'Medicinal, gripa',
+            'Ajenjo' => 'Medicinal, indigestión',
+            'Salvia' => 'Medicinal, molestias de la menopausia, regula los periodos menstruales',
+            'Bejuco lechero' => 'Medicinal, estimula la producción de leche materna',
+            'Suelda con suelda' => 'Medicinal, antiinflamatorio, dolor de articulaciones',
+            'Ruda de tierra' => 'Medicinal, cólicos posparto',
+            'Artemisa' => 'Medicinal, control de hemorragias',
+            'Eneldo' => 'Medicinal, controla niveles de colesterol',
+            'Sábila' => 'Medicinal, alivia quemaduras. También uso religioso/energético',
+            'Mirto' => 'Medicinal, trastornos digestivos',
+            'Árnica' => 'Medicinal, curación de huesos',
+            'Guadua' => 'Construcción',
+            'Bambú' => 'Construcción, artesanía',
+            'Fique' => 'Artesanía',
+            'Totumo' => 'Artesanal',
+            'Mora de Castilla' => 'Alimenticio',
+            'Palma de vino' => 'Construcción, artesanías',
+            'Gusanero' => 'Medicinal, resina',
+            'Curuba india' => 'Medicinal',
+            'Chivaco' => 'Medicinal',
+            'Reventadera' => 'Medicinal',
+            'Pico' => 'Medicinal',
+            'Pegamosco' => 'Medicinal',
+        ];
+
         foreach ($plantas as $planta) {
+            $planta['uso'] = $usos[$planta['nombre']] ?? $planta['uso'];
+            $planta['instrucciones'] = sprintf(
+                'Uso reportado: %s. Información recogida en el cuestionario de etnobotánica de la comunidad; pendiente de verificación experta.',
+                $planta['uso']
+            );
             DB::table('plantas')->updateOrInsert(
                 ['nombre' => $planta['nombre'], 'categoria_id' => $categoriaId, 'subtema_id' => $subtemaId],
                 $planta
