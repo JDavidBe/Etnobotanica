@@ -100,21 +100,75 @@ class CatalogoController extends Controller
         return view('public.ficha', compact('planta', 'comentarios'));
     }
 
+    /**
+     * Mapea términos coloquiales de síntomas a las palabras que sí
+     * aparecen en los datos (uso, descripción, instrucciones, contexto),
+     * para que buscar "diarrea" también encuentre plantas etiquetadas
+     * como "digestivo" o "cólico", aunque la palabra exacta no esté escrita.
+     */
+    private function sinonimosSintomas(): array
+    {
+        return [
+            'diarrea'          => ['colico', 'colicos', 'antidiarreico', 'digestivo', 'malestar estomacal'],
+            'dolor de estomago' => ['digestivo', 'colico', 'colicos', 'malestar estomacal'],
+            'dolor de cabeza'  => ['cefalea', 'calmante'],
+            'gripa'            => ['resfriado', 'catarro', 'respiratorio', 'tos'],
+            'gripe'            => ['resfriado', 'catarro', 'respiratorio', 'tos'],
+            'tos'              => ['respiratorio', 'expectorante'],
+            'insomnio'         => ['calmante', 'relajante', 'ansiedad'],
+            'ansiedad'         => ['calmante', 'relajante', 'nervios'],
+            'nervios'          => ['calmante', 'relajante', 'ansiedad'],
+            'golpe'            => ['antiinflamatorio', 'hematoma', 'inflamacion'],
+            'golpes'           => ['antiinflamatorio', 'hematoma', 'inflamacion'],
+            'quemadura'        => ['piel', 'heridas', 'cicatrizante'],
+            'herida'           => ['piel', 'cicatrizante'],
+            'heridas'          => ['piel', 'cicatrizante'],
+            'gases'            => ['carminativo', 'digestivo'],
+        ];
+    }
+
+    /**
+     * Quita tildes para que "estomago" encuentre lo mismo que "estómago",
+     * tanto en lo que escribe el usuario como en las claves del mapa de arriba.
+     */
+    private function normalizarTexto(string $texto): string
+    {
+        $texto = mb_strtolower(trim($texto));
+        $reemplazos = ['á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'];
+        return strtr($texto, $reemplazos);
+    }
+
     public function buscar(Request $request)
     {
         $q = $request->input('q', '');
         $plantas = collect();
 
         if (strlen($q) >= 2) {
+            $qNormalizado = $this->normalizarTexto($q);
+            $terminos = [$q];
+
+            foreach ($this->sinonimosSintomas() as $clave => $sinonimos) {
+                if (str_contains($qNormalizado, $clave)) {
+                    $terminos = array_merge($terminos, $sinonimos);
+                }
+            }
+
+            $terminos = array_unique($terminos);
+
             $plantas = Planta::with(['categoria', 'subtema'])
-                ->where(function ($query) use ($q) {
-                    $query->whereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$q}%"])
-                          ->orWhereRaw('LOWER(cientifico) LIKE LOWER(?)', ["%{$q}%"])
-                          ->orWhereRaw('LOWER(uso) LIKE LOWER(?)', ["%{$q}%"])
-                          ->orWhereRaw('LOWER(tags) LIKE LOWER(?)', ["%{$q}%"])
-                          ->orWhereHas('subtema', function ($subQuery) use ($q) {
-                              $subQuery->whereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$q}%"]);
-                          });
+                ->where(function ($query) use ($terminos) {
+                    foreach ($terminos as $termino) {
+                        $query->orWhereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(cientifico) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(uso) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(tags) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(descripcion) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(instrucciones) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereRaw('LOWER(contexto) LIKE LOWER(?)', ["%{$termino}%"])
+                              ->orWhereHas('subtema', function ($subQuery) use ($termino) {
+                                  $subQuery->whereRaw('LOWER(nombre) LIKE LOWER(?)', ["%{$termino}%"]);
+                              });
+                    }
                 })
                 ->orderBy('nombre')
                 ->get();
