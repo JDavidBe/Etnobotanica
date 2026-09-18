@@ -106,7 +106,7 @@ class PlantasSumapazUsoSeeder extends Seeder
                 'instrucciones'  => 'Machacar 1-2 hojas frescas hasta formar una pasta y aplicarla sobre la zona golpeada o inflamada, cubriendo con un paño limpio. No se recomienda su ingestión sin supervisión, por su toxicidad en dosis altas.',
                 'contexto'       => 'Contiene compuestos con acción antiinflamatoria y cicatrizante de uso tópico; en la tradición popular andina se le conoce como planta "de emergencia" para golpes y hematomas.',
                 'video_url'      => 'https://www.youtube.com/embed/w3t5utZuH3k',
-                'img_url'        => 'https://commons.wikimedia.org/wiki/Special:FilePath/Kalanchoe_daigremontiana_en_flor.jpg',
+                'img_url'        => 'https://commons.wikimedia.org/wiki/Special:FilePath/Bryophyllum_daigremontianum_nahaufnahme2.jpg',
                 'verificada'     => true,
                 'tags'           => 'medicina,primeros-auxilios,sumapaz',
             ],
