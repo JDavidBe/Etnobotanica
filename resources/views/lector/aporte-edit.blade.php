@@ -78,7 +78,7 @@
         <label>Foto de la planta <span style="font-weight:400;font-size:.8rem;opacity:.7">(JPG, PNG, WEBP, máx. 4 MB)</span></label>
         @if($aporte->img_path)
           <div style="margin-bottom:10px;display:flex;align-items:center;gap:12px">
-            <img src="{{ asset('storage/' . $aporte->img_path) }}" alt=""
+            <img src="{{ $aporte->imagenUrl }}" alt=""
                  style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border-lt)">
             <span style="font-size:.8rem;color:var(--texto-suave)">Imagen actual. Sube otra para reemplazarla.</span>
           </div>

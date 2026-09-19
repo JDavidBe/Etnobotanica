@@ -137,7 +137,7 @@
             @php $imgs = $aporte->imagenes; @endphp
             @if($imgs->count() > 0)
               <div style="position:relative;display:inline-block">
-                <img src="{{ asset('storage/' . $imgs->first()->img_path) }}"
+                <img src="{{ $imgs->first()->url }}"
                      alt="{{ $aporte->nombre_planta }}"
                      style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer"
                      onclick="abrirModal('modal-img-{{ $aporte->id }}')">
@@ -146,7 +146,7 @@
                 @endif
               </div>
             @elseif($aporte->img_path)
-              <img src="{{ asset('storage/' . $aporte->img_path) }}"
+              <img src="{{ $aporte->imagenUrl }}"
                    alt="{{ $aporte->nombre_planta }}"
                    style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer"
                    onclick="abrirModal('modal-img-{{ $aporte->id }}')">
@@ -212,15 +212,15 @@
           <div id="modal-img-{{ $aporte->id }}" class="modal-ov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;align-items:center;justify-content:center"
                onclick="if(event.target===this)cerrarModal('modal-img-{{ $aporte->id }}')">
             <div style="position:relative;max-width:90vw;max-height:90vh">
-              @php $allImgs = $aporte->imagenes->count() > 0 ? $aporte->imagenes->pluck('img_path') : collect([$aporte->img_path]); @endphp
+              @php $allImgs = $aporte->imagenes->count() > 0 ? $aporte->imagenes->map->url : collect([$aporte->imagenUrl]); @endphp
               @if($allImgs->count() === 1)
-                <img src="{{ asset('storage/' . $allImgs->first()) }}"
+                <img src="{{ $allImgs->first() }}"
                      alt="{{ $aporte->nombre_planta }}"
                      style="max-width:85vw;max-height:85vh;border-radius:14px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.6)">
               @else
                 <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:90vw">
                   @foreach($allImgs as $imgP)
-                    <img src="{{ asset('storage/' . $imgP) }}"
+                    <img src="{{ $imgP }}"
                          style="width:200px;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.5)">
                   @endforeach
                 </div>
@@ -446,11 +446,11 @@ function abrirDetallesAporte(id) {
   const galeria = document.getElementById('mdet-galeria');
   const imagenes = ap.imagenes || [];
   const imgPath  = ap.img_path;
-  const allImgs  = imagenes.length > 0 ? imagenes.map(i => i.img_path) : (imgPath ? [imgPath] : []);
+  const allImgs  = imagenes.length > 0 ? imagenes.map(i => i.url) : (imgPath ? [imgPath] : []);
 
   if (allImgs.length > 0) {
     galeria.innerHTML = allImgs.map(p =>
-      `<img src="/storage/${p}" style="width:100%;max-height:180px;object-fit:cover">`
+      `<img src="${/^(https?:)?\\/\\//i.test(p) ? p : '/storage/' + p}" style="width:100%;max-height:180px;object-fit:cover">`
     ).join('');
     galeria.style.display = 'flex';
   } else {

@@ -7,6 +7,7 @@ use App\Models\AporteImagen;
 use App\Models\Categoria;
 use App\Models\Comentario;
 use App\Models\Notificacion;
+use App\Services\CloudinaryUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -67,10 +68,17 @@ class AporteController extends Controller
             'imagenes.max'                => 'Puedes subir máximo 5 imágenes.',
         ]);
 
-        // Imagen principal (primera) en img_path para compatibilidad legado
-        $imgPath = null;
-        if ($request->hasFile('imagenes') && count($request->file('imagenes')) > 0) {
-            $imgPath = $request->file('imagenes')[0]->store('aportes', 'public');
+        $uploadedPaths = [];
+        if ($request->hasFile('imagenes')) {
+            $usesCloudinary = config('services.cloudinary.cloud_name')
+                && config('services.cloudinary.api_key')
+                && config('services.cloudinary.api_secret');
+
+            foreach ($request->file('imagenes') as $file) {
+                $uploadedPaths[] = $usesCloudinary
+                    ? CloudinaryUploader::upload($file, 'image', 'etnobotanica/aportes')
+                    : $file->store('aportes', 'public');
+            }
         }
 
         $aporte = Aporte::create([
@@ -80,7 +88,7 @@ class AporteController extends Controller
             'uso'           => $request->uso,
             'preparacion'   => $request->preparacion,
             'relato'        => $request->relato,
-            'img_path'      => $imgPath,
+            'img_path'      => $uploadedPaths[0] ?? null,
             'enviado_por'   => auth()->check() ? auth()->user()->name : 'Anónimo',
             'ip_origen'     => $request->ip(),
             'estado'        => 'pendiente',
@@ -88,9 +96,8 @@ class AporteController extends Controller
         ]);
 
         // Guardar imágenes adicionales en tabla aporte_imagenes
-        if ($request->hasFile('imagenes')) {
-            foreach ($request->file('imagenes') as $orden => $file) {
-                $path = $file->store('aportes', 'public');
+        if ($uploadedPaths) {
+            foreach ($uploadedPaths as $orden => $path) {
                 AporteImagen::create([
                     'aporte_id' => $aporte->id,
                     'img_path'  => $path,

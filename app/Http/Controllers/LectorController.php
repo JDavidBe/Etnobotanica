@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Aporte;
 use App\Models\Categoria;
+use App\Services\CloudinaryUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,8 +41,17 @@ class LectorController extends Controller
 
         $imgPath = $aporte->img_path;
         if ($request->hasFile('imagen')) {
-            if ($imgPath) Storage::disk('public')->delete($imgPath);
-            $imgPath = $request->file('imagen')->store('aportes', 'public');
+            $usesCloudinary = config('services.cloudinary.cloud_name')
+                && config('services.cloudinary.api_key')
+                && config('services.cloudinary.api_secret');
+
+            if ($imgPath && !preg_match('#^https?://#i', $imgPath)) {
+                Storage::disk('public')->delete($imgPath);
+            }
+
+            $imgPath = $usesCloudinary
+                ? CloudinaryUploader::upload($request->file('imagen'), 'image', 'etnobotanica/aportes')
+                : $request->file('imagen')->store('aportes', 'public');
         }
 
         $aporte->update([

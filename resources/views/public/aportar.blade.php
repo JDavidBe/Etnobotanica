@@ -142,7 +142,7 @@
 
           @if($ap->img_path)
             <div style="height:160px;overflow:hidden">
-              <img src="{{ asset('storage/' . $ap->img_path) }}"
+              <img src="{{ $ap->imagenUrl }}"
                    alt="{{ $ap->nombre_planta }}"
                    style="width:100%;height:100%;object-fit:cover">
             </div>
@@ -291,7 +291,9 @@ function abrirDetalleAporte(id) {
 
   const imgWrap = document.getElementById('det-img-wrap');
   if (ap.img_path) {
-    document.getElementById('det-img').src = '/storage/' + ap.img_path;
+    document.getElementById('det-img').src = /^(https?:)?\\/\\//i.test(ap.img_path)
+      ? ap.img_path
+      : '/storage/' + ap.img_path;
     document.getElementById('det-img').alt = ap.nombre_planta;
     imgWrap.style.display = 'block';
   } else {

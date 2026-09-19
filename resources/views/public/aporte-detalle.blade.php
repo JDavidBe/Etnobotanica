@@ -36,22 +36,22 @@
       @php $imgs = $aporte->imagenes; @endphp
       @if($imgs->count() > 0)
         {{-- Imagen principal grande --}}
-        <img src="{{ asset('storage/' . $imgs->first()->img_path) }}" alt="{{ $aporte->nombre_planta }}"
+        <img src="{{ $imgs->first()->url }}" alt="{{ $aporte->nombre_planta }}"
              id="galeria-main" style="width:100%;border-radius:var(--radio,12px);object-fit:cover;max-height:320px;cursor:pointer"
              onclick="abrirLightbox(0)">
         {{-- Thumbnails adicionales --}}
         @if($imgs->count() > 1)
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
             @foreach($imgs as $i => $img)
-              <img src="{{ asset('storage/' . $img->img_path) }}"
+              <img src="{{ $img->url }}"
                    alt="{{ $aporte->nombre_planta }} {{ $i+1 }}"
                    style="width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid {{ $i===0 ? 'var(--verde-mid)' : 'transparent' }};transition:border .15s"
-                   onclick="cambiarMain('{{ asset('storage/' . $img->img_path) }}', this); abrirLightbox({{ $i }})">
+                   onclick="cambiarMain('{{ $img->url }}', this); abrirLightbox({{ $i }})">
             @endforeach
           </div>
         @endif
       @elseif($aporte->img_path)
-        <img src="{{ asset('storage/' . $aporte->img_path) }}" alt="{{ $aporte->nombre_planta }}"
+        <img src="{{ $aporte->imagenUrl }}" alt="{{ $aporte->nombre_planta }}"
              style="width:100%;border-radius:var(--radio,12px);object-fit:cover;max-height:320px">
       @else
         <div class="ficha-no-img">

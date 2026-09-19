@@ -30,7 +30,7 @@
             @php $imgs = $ap->imagenes; @endphp
             @if($imgs->count() > 0)
               <div style="position:relative;width:100%;height:100%">
-                <img src="{{ asset('storage/' . $imgs->first()->img_path) }}" alt="{{ $ap->nombre_planta }}" style="width:100%;height:100%;object-fit:cover">
+                <img src="{{ $imgs->first()->url }}" alt="{{ $ap->nombre_planta }}" style="width:100%;height:100%;object-fit:cover">
                 @if($imgs->count() > 1)
                   <span style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;font-size:.65rem;padding:2px 7px;border-radius:10px">
                     +{{ $imgs->count() - 1 }}
@@ -38,7 +38,7 @@
                 @endif
               </div>
             @elseif($ap->img_path)
-              <img src="{{ asset('storage/' . $ap->img_path) }}" alt="{{ $ap->nombre_planta }}">
+              <img src="{{ $ap->imagenUrl }}" alt="{{ $ap->nombre_planta }}">
             @else
               <div class="mac-noimg"><i class="fas fa-seedling"></i></div>
             @endif

@@ -61,7 +61,7 @@
           <a href="{{ route('aportes.show', $ap->id) }}" class="card-aporte-home" style="text-decoration:none;color:inherit">
             <div class="cah-img">
               @if($ap->img_path)
-                <img src="{{ asset('storage/' . $ap->img_path) }}" alt="{{ $ap->nombre_planta }}">
+                <img src="{{ $ap->imagenUrl }}" alt="{{ $ap->nombre_planta }}">
               @else
                 <div class="cah-noimg">
                   <i class="fas fa-seedling"></i>

@@ -37,7 +37,13 @@ class Aporte extends Model
      */
     public function getImagenUrlAttribute(): ?string
     {
-        return $this->img_path ? asset('storage/' . $this->img_path) : null;
+        if (!$this->img_path) {
+            return null;
+        }
+
+        return preg_match('#^(https?://|//)#i', $this->img_path)
+            ? $this->img_path
+            : asset('storage/' . $this->img_path);
     }
 
     public function comentarios(): \Illuminate\Database\Eloquent\Relations\HasMany

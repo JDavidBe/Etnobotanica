@@ -23,6 +23,8 @@ class AporteImagen extends Model
 
     public function getUrlAttribute(): string
     {
-        return asset('storage/' . $this->img_path);
+        return preg_match('#^(https?://|//)#i', $this->img_path)
+            ? $this->img_path
+            : asset('storage/' . $this->img_path);
     }
 }
