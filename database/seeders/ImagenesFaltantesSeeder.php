@@ -19,7 +19,7 @@ class ImagenesFaltantesSeeder extends Seeder
     /** Imagen por nombre científico (lo más fiable para emparejar). */
     private const POR_CIENTIFICO = [
         'Kalanchoe daigremontiana' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Zyworodka_-_Kalanchoe_daigremontiana.JPG/960px-Zyworodka_-_Kalanchoe_daigremontiana.JPG',
-        'Curcuma longa'            => 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Starr-140925-1977-Curcuma_longa-flowering_habit-Pali_o_Waipio_Huelo-Maui_%2825128294462%29.jpg/960px-Starr-140925-1977-Curcuma_longa-flowering_habit-Pali_o_Waipio_Huelo-Maui_%2825128294462%29.jpg',
+        'Curcuma longa'            => 'https://cdn1.costatic.com/assets/img/guide_achat/articles/curcuma-planta-con-multiples-virtudes_19b0cf18d80b2834.jpg',
         'Cissus verticillata'      => 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Cissus_verticillata_2.jpg/960px-Cissus_verticillata_2.jpg',
         'Terminalia catappa'       => 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Terminalia_Catappa_D8348.jpg/960px-Terminalia_Catappa_D8348.jpg',
         'Brugmansia sp.'           => 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/B._arborea_flor-1.JPG/960px-B._arborea_flor-1.JPG',
