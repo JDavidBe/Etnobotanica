@@ -94,11 +94,15 @@ class ModeracionController extends Controller
 
     public function destroy(Aporte $aporte)
     {
-        if ($aporte->img_path && Storage::exists('public/' . $aporte->img_path)) {
+        if ($aporte->img_path
+            && !preg_match('#^https?://#i', $aporte->img_path)
+            && Storage::exists('public/' . $aporte->img_path)) {
             Storage::delete('public/' . $aporte->img_path);
         }
         foreach ($aporte->imagenes as $img) {
-            Storage::disk('public')->delete($img->img_path);
+            if (!preg_match('#^https?://#i', $img->img_path)) {
+                Storage::disk('public')->delete($img->img_path);
+            }
         }
 
         $aporte->delete();

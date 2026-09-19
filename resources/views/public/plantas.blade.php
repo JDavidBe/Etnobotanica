@@ -34,7 +34,7 @@
       @forelse($plantas as $planta)
         <a href="{{ route('plantas.show', $planta->id) }}" class="plant-card">
           @if($planta->img_url)
-            <img src="{{ asset($planta->img_url) }}" class="plant-img" alt="{{ $planta->nombre }}">
+            <img src="{{ $planta->imagenUrl }}" class="plant-img" alt="{{ $planta->nombre }}">
           @else
             <div class="plant-no-img"><i class="fas fa-leaf"></i></div>
           @endif

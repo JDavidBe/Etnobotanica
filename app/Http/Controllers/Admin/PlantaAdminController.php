@@ -174,7 +174,7 @@ class PlantaAdminController extends Controller
         }
 
         if ($request->boolean('borrar_imagen') || $request->hasFile('imagen')) {
-            if ($planta->img_path) {
+            if ($planta->img_path && !preg_match('#^https?://#i', $planta->img_path)) {
                 Storage::disk('public')->delete($planta->img_path);
             }
             $data['img_path'] = null;
@@ -210,7 +210,7 @@ class PlantaAdminController extends Controller
     {
         $nombre = $planta->nombre;
 
-        if ($planta->img_path) {
+        if ($planta->img_path && !preg_match('#^https?://#i', $planta->img_path)) {
             Storage::disk('public')->delete($planta->img_path);
         }
 

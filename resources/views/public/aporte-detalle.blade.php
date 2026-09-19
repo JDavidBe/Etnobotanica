@@ -126,8 +126,8 @@
 
 @push('scripts')
 <script>
-@php $allImgs = $aporte->imagenes->count() > 0 ? $aporte->imagenes->pluck('img_path') : collect([$aporte->img_path]); @endphp
-const _lbImgs = @json($allImgs->map(fn($p) => asset('storage/' . $p)));
+@php $allImgs = $aporte->imagenes->count() > 0 ? $aporte->imagenes->map->url : collect([$aporte->imagenUrl]); @endphp
+const _lbImgs = @json($allImgs->values());
 let _lbIdx = 0;
 
 function abrirLightbox(idx) {
