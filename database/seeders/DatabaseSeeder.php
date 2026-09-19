@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             PlantasSeeder::class,
             EnciclopediaPlantasSeeder::class,
             PlantasSumapazUsoSeeder::class,
+            Tabla2PlantasUsoSeeder::class,
             AuditoriaLogSeeder::class,
         ]);
     }
