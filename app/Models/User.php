@@ -31,7 +31,15 @@ class User extends Authenticatable
 
     public function avatarUrl(): ?string
     {
-        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+        if (!$this->avatar) {
+            return null;
+        }
+
+        if (preg_match('#^(https?://|//)#i', $this->avatar)) {
+            return $this->avatar;
+        }
+
+        return asset('storage/' . $this->avatar);
     }
 
     public function aportes(): \Illuminate\Database\Eloquent\Relations\HasMany

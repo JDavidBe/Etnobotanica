@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CloudinaryUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,10 +30,19 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+            $avatar = $request->file('avatar');
+
+            if (config('services.cloudinary.cloud_name')
+                && config('services.cloudinary.api_key')
+                && config('services.cloudinary.api_secret')) {
+                $data['avatar'] = CloudinaryUploader::upload($avatar, 'image', 'etnobotanica/avatars');
+            } else {
+                if ($user->avatar && !preg_match('#^https?://#i', $user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                $data['avatar'] = $avatar->store('avatars', 'public');
             }
-            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
         $user->update($data);
