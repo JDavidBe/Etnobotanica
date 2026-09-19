@@ -16,8 +16,8 @@ class RolesAndPermissionsSeeder extends Seeder
             // Si la tabla de cache aún no existe, no bloqueamos el seeding.
         }
 
-        Role::create(['name' => 'lector']);
-        Role::create(['name' => 'moderador']);
-        Role::create(['name' => 'admin']);
+        foreach (['lector', 'moderador', 'admin'] as $roleName) {
+            Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
+        }
     }
 }
