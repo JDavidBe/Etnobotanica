@@ -7,6 +7,7 @@ envsubst '${PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 php artisan migrate --force
 php artisan db:seed --class=EnciclopediaPlantasSeeder --force
 php artisan db:seed --class=PlantasSumapazUsoSeeder --force
+php artisan db:seed --class=ImagenesFaltantesSeeder --force
 php artisan db:seed --class=Tabla2PlantasUsoSeeder --force
 php artisan config:cache
 php artisan route:cache

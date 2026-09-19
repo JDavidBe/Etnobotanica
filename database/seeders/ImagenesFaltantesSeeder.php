@@ -16,6 +16,8 @@ use Illuminate\Database\Seeder;
  */
 class ImagenesFaltantesSeeder extends Seeder
 {
+    private const CURCUMA_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Starr-140925-1977-Curcuma_longa-flowering_habit-Pali_o_Waipio_Huelo-Maui_%2825128294462%29.jpg/960px-Starr-140925-1977-Curcuma_longa-flowering_habit-Pali_o_Waipio_Huelo-Maui_%2825128294462%29.jpg';
+
     /** Imagen por nombre científico (lo más fiable para emparejar). */
     private const POR_CIENTIFICO = [
         'Kalanchoe daigremontiana' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Zyworodka_-_Kalanchoe_daigremontiana.JPG/960px-Zyworodka_-_Kalanchoe_daigremontiana.JPG',
@@ -35,6 +37,14 @@ class ImagenesFaltantesSeeder extends Seeder
     public function run(): void
     {
         $actualizadas = 0;
+
+        Planta::query()
+            ->where('cientifico', 'Curcuma longa')
+            ->update([
+                'img_url' => self::CURCUMA_URL,
+                'img_path' => null,
+                'foto_referencia_url' => self::CURCUMA_URL,
+            ]);
 
         Planta::query()
             ->whereNull('img_path')
