@@ -166,7 +166,12 @@
             <dt>{{ $nivel }}</dt>
             <dd @class(['tax-especie' => $nivel === 'Especie'])>
               @if($valor)
-                <em>{{ $valor }}</em>
+                @if(in_array($nivel, ['Género', 'Especie'], true))
+                  {{-- Solo Género y Especie van en cursiva (norma del ICN) --}}
+                  <em>{{ $valor }}</em>
+                @else
+                  {{ $valor }}
+                @endif
               @else
                 <span class="tax-nd">No determinado</span>
               @endif
@@ -295,6 +300,7 @@
   color:var(--texto);
   line-height:1.3;
   word-break:break-word;
+  font-style:normal; /* Reino, División, Clase, Orden y Familia: redonda */
 }
 .taxonomia-card dd em {
   font-style:italic;
