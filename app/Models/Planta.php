@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Planta extends Model
 {
-    public $timestamps = true;
+    public $timestamps = false;
 
     const CREATED_AT  = 'creado_en';
     const UPDATED_AT  = 'actualizado_en';
