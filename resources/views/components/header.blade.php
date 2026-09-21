@@ -20,11 +20,6 @@
   </div>
   @endif
 
-  {{-- Botón de tema en móvil: visible siempre, junto a la hamburguesa (ver media query en app.css) --}}
-  <button class="theme-btn theme-btn-mobile" id="theme-btn-mobile" onclick="toggleTheme()" title="Claro / Oscuro" aria-label="Cambiar tema claro/oscuro">
-    <i class="fas fa-moon"></i>
-  </button>
-
   {{-- Botón hamburguesa: solo visible en móvil (ver media query en app.css) --}}
   <button class="hdr-burger" id="hdr-burger" onclick="toggleMobileMenu()" title="Menú" aria-label="Abrir menú" aria-expanded="false">
     <i class="fas fa-bars"></i>
