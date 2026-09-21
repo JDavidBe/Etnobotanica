@@ -376,6 +376,8 @@ header {
 }
 .theme-btn:hover { background: rgba(255,255,255,.24); transform: rotate(30deg) scale(1.06); }
 
+.theme-btn-mobile { display: none; }
+
 .notif-btn:hover { transform: scale(1.08); }
 .notif-btn:hover i { animation: campanazo .5s ease; }
 @keyframes campanazo {
@@ -414,6 +416,7 @@ header {
 @media (max-width: 860px) {
   header { padding: 0 .9rem; flex-wrap: wrap; }
   .hdr-burger { display: flex; }
+  .theme-btn-mobile { display: flex; margin-left: auto; }
   .hdr-escudo { display: none; }
 
   #hdr-bc.breadcrumbs {
