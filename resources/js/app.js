@@ -5,10 +5,11 @@ import './bootstrap';
 
 /* ── TEMA CLARO / OSCURO ── */
 function setThemeButtonIcon() {
-  const btn = document.getElementById('theme-btn');
-  if (!btn) return;
+  const btns = document.querySelectorAll('.theme-btn');
+  if (!btns.length) return;
   const theme = document.documentElement.getAttribute('data-theme');
-  btn.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  const icon = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  btns.forEach(btn => btn.innerHTML = icon);
 }
 
 function toggleTheme() {
@@ -61,16 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const burger = document.getElementById('hdr-burger');
   if (!panel || !burger) return;
 
-  // Cerrar el panel móvil al hacer click en un enlace o botón dentro de él
   panel.addEventListener('click', e => {
-    if (e.target.closest('a, button:not(#theme-btn):not(#notif-btn)')) {
+    const target = e.target.closest('a, button');
+    if (!target) return;
+
+    const excluded = target.closest('.theme-btn') || target.closest('.notif-btn');
+    if (!excluded && !(target.closest('.hdr-burger'))) {
       panel.classList.remove('open');
       burger.setAttribute('aria-expanded', 'false');
       burger.innerHTML = '<i class="fas fa-bars"></i>';
     }
   });
 
-  // Si la ventana vuelve a tamaño de escritorio, resetear el estado del menú
   window.addEventListener('resize', () => {
     if (window.innerWidth > 860 && panel.classList.contains('open')) {
       panel.classList.remove('open');
@@ -103,5 +106,5 @@ document.addEventListener('DOMContentLoaded', () => {
     o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); })
   );
 
-
+  setThemeButtonIcon();
 });
