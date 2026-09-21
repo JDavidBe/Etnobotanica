@@ -9,6 +9,7 @@ php artisan db:seed --class=EnciclopediaPlantasSeeder --force
 php artisan db:seed --class=PlantasSumapazUsoSeeder --force
 php artisan db:seed --class=ImagenesFaltantesSeeder --force
 php artisan db:seed --class=Tabla2PlantasUsoSeeder --force
+php artisan db:seed --class=PlantasVideosMedicinaSeeder --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
