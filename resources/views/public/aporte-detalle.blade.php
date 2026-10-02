@@ -67,7 +67,7 @@
          onclick="if(event.target===this)cerrarLightbox()">
       <button onclick="cerrarLightbox()" style="position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:1.1rem;cursor:pointer">×</button>
       <button onclick="lb(-1)" style="position:absolute;left:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:1.3rem;cursor:pointer">‹</button>
-      <img id="lb-img" src="" style="max-width:88vw;max-height:88vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)">
+      <img id="lb-img" alt="Imagen ampliada" src="" style="max-width:88vw;max-height:88vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)">
       <button onclick="lb(1)" style="position:absolute;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:1.3rem;cursor:pointer">›</button>
     </div>
     @endif
