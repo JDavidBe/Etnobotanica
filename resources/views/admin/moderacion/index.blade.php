@@ -220,7 +220,7 @@
               @else
                 <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:90vw">
                   @foreach($allImgs as $imgP)
-                    <img src="{{ $imgP }}"
+                    <img src="{{ $imgP }}" alt="Imagen del aporte"
                          style="width:200px;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.5)">
                   @endforeach
                 </div>
@@ -450,7 +450,7 @@ function abrirDetallesAporte(id) {
 
   if (allImgs.length > 0) {
     galeria.innerHTML = allImgs.map(p =>
-      `<img src="${/^(https?:)?\\/\\//i.test(p) ? p : '/storage/' + p}" style="width:100%;max-height:180px;object-fit:cover">`
+      `<img alt="Imagen del aporte" src="${/^(https?:)?\\/\\//i.test(p) ? p : '/storage/' + p}" style="width:100%;max-height:180px;object-fit:cover">`
     ).join('');
     galeria.style.display = 'flex';
   } else {
