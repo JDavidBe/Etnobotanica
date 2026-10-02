@@ -259,7 +259,7 @@ function previewMultiple(input) {
     reader.onload = e => {
       const div = document.createElement('div');
       div.style.cssText = 'position:relative;width:80px;height:80px';
-      div.innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--verde-light,#a5d6a7)">
+      div.innerHTML = `<img alt="Vista previa de la imagen seleccionada" src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--verde-light,#a5d6a7)">
         <span style="position:absolute;top:2px;left:4px;background:rgba(0,0,0,.55);color:#fff;font-size:.65rem;border-radius:4px;padding:1px 5px">${i+1}</span>`;
       wrap.appendChild(div);
     };
