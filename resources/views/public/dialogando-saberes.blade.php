@@ -92,8 +92,9 @@
 
 <style>
 .ds-slideshow {
-  position: relative; width: 100%; height: 62vh; min-height: 320px; max-height: 620px;
-  border-radius: 18px; overflow: hidden; box-shadow: var(--sombra-lg); background: var(--bg-card);
+  position: relative; width: min(100%, 1200px); margin: 0 auto; height: 62vh; min-height: 320px; max-height: 620px;
+  border-radius: 22px; overflow: hidden; box-shadow: var(--sombra-lg); background: var(--bg-card);
+  border: 1px solid rgba(55, 124, 91, 0.12);
 }
 .ds-slide {
   position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease;
@@ -111,32 +112,32 @@
   font-size: 3.5rem; color: var(--texto-suave); opacity: .35;
 }
 .ds-caption {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: 48px 28px 20px;
-  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
-  color: #fff; font-size: 1.1rem; font-weight: 600;
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 52px 28px 22px;
+  background: linear-gradient(to top, rgba(0,0,0,.74), rgba(0,0,0,0));
+  color: #fff; font-size: 1.1rem; font-weight: 700; letter-spacing: .01em;
 }
 .ds-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 46px; height: 46px; border-radius: 50%; border: none;
-  background: rgba(0,0,0,.4); color: #fff; cursor: pointer;
+  background: rgba(17, 24, 39, .38); color: #fff; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background .2s ease; z-index: 2;
+  backdrop-filter: blur(4px); transition: background .2s ease, transform .2s ease; z-index: 2;
 }
-.ds-arrow:hover { background: rgba(0,0,0,.65); }
-.ds-prev { left: 16px; }
-.ds-next { right: 16px; }
+.ds-arrow:hover { background: rgba(17, 24, 39, .62); transform: translateY(-50%) scale(1.04); }
+.ds-prev { left: 18px; }
+.ds-next { right: 18px; }
 .ds-dots {
-  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
   display: flex; gap: 8px; z-index: 2;
 }
 .ds-dot {
-  width: 9px; height: 9px; border-radius: 50%; border: none;
-  background: rgba(255,255,255,.5); cursor: pointer; padding: 0;
+  width: 10px; height: 10px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.52); cursor: pointer; padding: 0;
   transition: background .2s ease, transform .2s ease;
 }
-.ds-dot.is-active { background: #fff; transform: scale(1.3); }
+.ds-dot.is-active { background: #fff; transform: scale(1.35); }
 @media (max-width: 700px) {
-  .ds-slideshow { height: 44vh; min-height: 240px; }
+  .ds-slideshow { height: 44vh; min-height: 240px; border-radius: 16px; }
   .ds-caption { font-size: .95rem; padding: 36px 16px 14px; }
   .ds-arrow { width: 36px; height: 36px; }
 }

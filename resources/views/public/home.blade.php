@@ -38,7 +38,7 @@
         </div>
       @endforelse
 
-      <a href="{{ route('dialogando-saberes') }}" class="card-cat">
+      <a href="{{ route('dialogando-saberes') }}" class="card-cat card-cat-featured">
         <div class="cat-ico">
           <i class="fas fa-comments"></i>
         </div>
@@ -109,6 +109,16 @@
 }
 .btn-catalogo:hover { background: var(--verde-mid); color: white; text-decoration: none; }
 .btn-catalogo i { font-size: 1.1rem; }
+
+.card-cat-featured {
+  border: 1px solid rgba(72, 137, 88, 0.35);
+  box-shadow: 0 12px 24px rgba(44, 94, 60, 0.10);
+  background: linear-gradient(180deg, rgba(245, 250, 246, 0.9), rgba(255,255,255,0.95));
+}
+.card-cat-featured:hover {
+  transform: translateY(-4px);
+  border-color: rgba(72, 137, 88, 0.54);
+}
 
 /* ── Tarjeta aporte home ── */
 .card-aporte-home {
