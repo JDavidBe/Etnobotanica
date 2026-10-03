@@ -24,6 +24,8 @@ Route::get('/', [CatalogoController::class, 'home'])->name('home');
 
 Route::get('/creditos', fn() => view('public.creditos'))->name('creditos');
 
+Route::get('/dialogando-saberes', fn() => view('public.dialogando-saberes'))->name('dialogando-saberes');
+
 Route::get('/terminos-y-condiciones', fn() => view('public.terminos'))->name('terminos');
 
 Route::get('/catalogo', [CatalogoController::class, 'catalogo'])->name('catalogo');
