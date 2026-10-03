@@ -22,16 +22,12 @@
   // Para agregar, quitar o cambiar una foto, edita este arreglo.
   // 'url': enlace directo a la imagen. 'caption': texto que aparece sobre la foto.
   $dialogandoSaberes = [
-    ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro comunitario'],
-    ['url' => asset('img/cafeto.webp'), 'caption' => 'Trabajo de campo con la comunidad'],
-    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Diálogo de saberes'],
-    ['url' => asset('img/mora.jpg'), 'caption' => 'Diálogo de saberes'],
-    ['url' => asset('img/moringa.webp'), 'caption' => 'Encuentro comunitario'],
-    ['url' => asset('img/pata.jpg'), 'caption' => 'Encuentro en Chinauta'],
-    ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro en Chinauta'],
-    ['url' => asset('img/cafeto.webp'), 'caption' => 'Diálogo de saberes en San José de Piamonte'],
-    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Plaza de mercado de Fusagasugá'],
-    ['url' => asset('img/moringa.webp'), 'caption' => 'Mercado artesanal'],
+    ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro comunitario con sabedores locales'],
+    ['url' => asset('img/cafeto.webp'), 'caption' => 'Trabajo de campo y diálogo de saberes'],
+    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Compartiendo conocimiento sobre plantas medicinales'],
+    ['url' => asset('img/mora.jpg'), 'caption' => 'Mercado de plantas y usos tradicionales'],
+    ['url' => asset('img/moringa.webp'), 'caption' => 'Cultivo y cuidado de especies medicinales'],
+    ['url' => asset('img/pata.jpg'), 'caption' => 'Saberes locales en comunidad'],
   ];
 @endphp
 
