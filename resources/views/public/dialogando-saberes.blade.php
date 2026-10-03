@@ -24,8 +24,8 @@
   $dialogandoSaberes = [
     ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro comunitario con sabedores locales'],
     ['url' => asset('img/cafeto.webp'), 'caption' => 'Trabajo de campo y diálogo de saberes'],
-    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Compartiendo conocimiento sobre plantas medicinales'],
     ['url' => asset('img/mora.jpg'), 'caption' => 'Mercado de plantas y usos tradicionales'],
+    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Compartiendo conocimiento sobre plantas medicinales'],
     ['url' => asset('img/moringa.webp'), 'caption' => 'Cultivo y cuidado de especies medicinales'],
     ['url' => asset('img/pata.jpg'), 'caption' => 'Saberes locales en comunidad'],
   ];
