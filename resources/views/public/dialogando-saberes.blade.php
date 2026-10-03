@@ -22,20 +22,16 @@
   // Para agregar, quitar o cambiar una foto, edita este arreglo.
   // 'url': enlace directo a la imagen. 'caption': texto que aparece sobre la foto.
   $dialogandoSaberes = [
-    ['url' => 'https://drive.google.com/thumbnail?id=1HByny92I0H8hfu1C1E_YF7SfDzReAvHk&sz=w1600', 'caption' => 'Encuentro comunitario'],
-    ['url' => 'https://drive.google.com/thumbnail?id=1nXQBRA3iR1d4hN02RGA-rXoNzlX4JJrB&sz=w1600', 'caption' => 'Trabajo de campo con la comunidad'],
-    ['url' => 'https://drive.google.com/thumbnail?id=1PdKjZBxuBuBn8sKQxIt5senNF2S1mUyb&sz=w1600', 'caption' => 'Diálogo de saberes'],
-    ['url' => 'https://drive.google.com/thumbnail?id=1qG2IDvfGErFT_a0i8I2PGUR67zfuj1eE&sz=w1600', 'caption' => 'Diálogo de saberes'],
-    ['url' => 'https://drive.google.com/thumbnail?id=1d1RmLAjIKzlKg3-ASwN3Qdcwvi7eVC-B&sz=w1600', 'caption' => 'Encuentro comunitario'],
-    // Las siguientes 5 vienen de SharePoint institucional: por ahora puede que no
-    // carguen para los visitantes, porque ese enlace exige iniciar sesión con la
-    // cuenta @ucundinamarca.edu.co. Mientras tanto se ven con un ícono de
-    // reemplazo. Lo ideal es descargarlas y subirlas al proyecto (ver LEEME).
-    ['url' => 'https://mailunicundiedu-my.sharepoint.com/:i:/r/personal/anaesperanzamerchan_ucundinamarca_edu_co/Documents/Etnobot%C3%A1nica/evidencia%20fotografica/chinauta/IMG_20260225_111518.jpg?d=w4c414921860342beac6db916310cede8&csf=1&web=1&e=p8ktJa', 'caption' => 'Encuentro en Chinauta'],
-    ['url' => 'https://mailunicundiedu-my.sharepoint.com/:i:/r/personal/anaesperanzamerchan_ucundinamarca_edu_co/Documents/Etnobot%C3%A1nica/evidencia%20fotografica/chinauta/IMG_20260225_112849.jpg?d=wb1e338d9ac5241c6859caa6895f87dc3&csf=1&web=1&e=UrFoe4', 'caption' => 'Encuentro en Chinauta'],
-    ['url' => 'https://mailunicundiedu-my.sharepoint.com/:i:/r/personal/anaesperanzamerchan_ucundinamarca_edu_co/Documents/Etnobot%C3%A1nica/evidencia%20fotografica/san%20jose%20piamonte/WhatsApp%20Image%202026-03-20%20at%206.19.39%20PM.jpeg?d=w36b07c567cc24f8a95bb7f1d4bcb4fd8&csf=1&web=1&e=9dE8lN', 'caption' => 'Diálogo de saberes en San José de Piamonte'],
-    ['url' => 'https://mailunicundiedu-my.sharepoint.com/:i:/r/personal/anaesperanzamerchan_ucundinamarca_edu_co/Documents/Etnobot%C3%A1nica/evidencia%20fotografica/plaza%20mercado/IMG_20260220_092810.jpg?d=wb16c2a6f6b7f49b6bf9034763ec5e20f&csf=1&web=1&e=dpzLGH', 'caption' => 'Plaza de mercado de Fusagasugá'],
-    ['url' => 'https://mailunicundiedu-my.sharepoint.com/:i:/r/personal/anaesperanzamerchan_ucundinamarca_edu_co/Documents/Etnobot%C3%A1nica/evidencia%20fotografica/Mercado%20artesanal/cc9bfa1d-76d3-4c65-a718-c9084ab4dafb.jfif?d=web70c69c1be4485a8b674b3d8657b838&csf=1&web=1&e=lJzywA', 'caption' => 'Mercado artesanal'],
+    ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro comunitario'],
+    ['url' => asset('img/cafeto.webp'), 'caption' => 'Trabajo de campo con la comunidad'],
+    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Diálogo de saberes'],
+    ['url' => asset('img/mora.jpg'), 'caption' => 'Diálogo de saberes'],
+    ['url' => asset('img/moringa.webp'), 'caption' => 'Encuentro comunitario'],
+    ['url' => asset('img/pata.jpg'), 'caption' => 'Encuentro en Chinauta'],
+    ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro en Chinauta'],
+    ['url' => asset('img/cafeto.webp'), 'caption' => 'Diálogo de saberes en San José de Piamonte'],
+    ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Plaza de mercado de Fusagasugá'],
+    ['url' => asset('img/moringa.webp'), 'caption' => 'Mercado artesanal'],
   ];
 @endphp
 
