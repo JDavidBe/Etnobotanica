@@ -24,6 +24,11 @@
   $dialogandoSaberes = [
     ['url' => asset('img/balu.webp'), 'caption' => 'Encuentro comunitario con sabedores locales'],
     ['url' => asset('img/cafeto.webp'), 'caption' => 'Trabajo de campo y diálogo de saberes'],
+    ['url' => asset('img/encuentro-chinauta-1.jpg'), 'caption' => 'Encuentro en Chinauta'],
+    ['url' => asset('img/encuentro-chinauta-2.jpg'), 'caption' => 'Encuentro en Chinauta'],
+    ['url' => asset('img/san-jose-piamonte.jpg'), 'caption' => 'Diálogo de saberes en San José de Piamonte'],
+    ['url' => asset('img/encuentro-mercado.jpg'), 'caption' => 'Plaza de mercado de Fusagasugá'],
+    ['url' => asset('img/mercado-artesanal.jpg'), 'caption' => 'Mercado artesanal'],
     ['url' => asset('img/mora.jpg'), 'caption' => 'Mercado de plantas y usos tradicionales'],
     ['url' => asset('img/Guayabo.jpg'), 'caption' => 'Compartiendo conocimiento sobre plantas medicinales'],
     ['url' => asset('img/moringa.webp'), 'caption' => 'Cultivo y cuidado de especies medicinales'],
