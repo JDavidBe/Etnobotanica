@@ -75,6 +75,40 @@ class Planta extends Model
     }
 
     // Categoría principal (FK legado)
+    /**
+     * Indica si la ficha documenta un uso medicinal (categoría principal o
+     * cualquiera de sus categorías adicionales).
+     */
+    public function getEsMedicinalAttribute(): bool
+    {
+        $nombres = collect([$this->categoria?->nombre])
+            ->merge($this->relationLoaded('categorias') ? $this->categorias->pluck('nombre') : $this->categorias()->pluck('nombre'))
+            ->filter()
+            ->map(fn ($n) => mb_strtolower($n));
+
+        return $nombres->contains('medicina');
+    }
+
+    /**
+     * Mensaje de precaución específico de la especie, si el nombre científico
+     * coincide con alguna entrada de config('etnobotanica.plantas_precaucion').
+     */
+    public function getAvisoPrecaucionAttribute(): ?string
+    {
+        $cientifico = trim((string) $this->cientifico);
+        if ($cientifico === '') {
+            return null;
+        }
+
+        foreach (config('etnobotanica.plantas_precaucion', []) as $clave => $mensaje) {
+            if (str_starts_with(mb_strtolower($cientifico), mb_strtolower($clave))) {
+                return $mensaje;
+            }
+        }
+
+        return null;
+    }
+
     public function categoria(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Categoria::class);

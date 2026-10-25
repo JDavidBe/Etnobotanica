@@ -213,6 +213,20 @@
       </div>
     </div>
 
+    @if($planta->aviso_precaucion || $planta->es_medicinal)
+      <div class="aviso-seguridad {{ $planta->aviso_precaucion ? 'aviso-seguridad--riesgo' : '' }}" role="note" aria-label="Advertencia de seguridad">
+        <h3><i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          {{ $planta->aviso_precaucion ? 'Precaución con esta planta' : 'Uso responsable' }}
+        </h3>
+        @if($planta->aviso_precaucion)
+          <p class="aviso-especifico">{{ $planta->aviso_precaucion }}</p>
+        @endif
+        <p>Esta ficha documenta un saber tradicional con fines culturales y educativos; no es una recomendación médica.
+           Antes de usar cualquier planta con fines medicinales, consulte a un profesional de la salud, en especial
+           si está en embarazo o lactancia, si es para un niño o niña, o si toma otros medicamentos.</p>
+      </div>
+    @endif
+
     <div class="info-card">
       <h3><i class="fas fa-mortar-pestle"></i> Instrucciones de preparación</h3>
       <p>{{ $planta->instrucciones }}</p>
@@ -246,6 +260,24 @@
 </div>
 
 <style>
+.aviso-seguridad {
+  border-left: 4px solid #c9a227;
+  background: #fff8e1;
+  color: #4a3b00;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+}
+.aviso-seguridad h3 { margin: 0 0 8px; font-size: 1rem; color: #7a5d00; }
+.aviso-seguridad p { margin: 0; font-size: .9rem; line-height: 1.55; }
+.aviso-seguridad--riesgo { border-left-color: #c0392b; background: #fdecea; color: #5b1a14; }
+.aviso-seguridad--riesgo h3 { color: #a1281c; }
+.aviso-seguridad .aviso-especifico { font-weight: 600; margin-bottom: 8px; }
+[data-theme="dark"] .aviso-seguridad { background: #3a3110; color: #f6e7b0; }
+[data-theme="dark"] .aviso-seguridad h3 { color: #f2d36b; }
+[data-theme="dark"] .aviso-seguridad--riesgo { background: #3d1714; color: #f8c9c3; }
+[data-theme="dark"] .aviso-seguridad--riesgo h3 { color: #ff9b8e; }
+
 .video-overlay-credito {
   position:absolute;
   bottom:0; left:0; right:0;
