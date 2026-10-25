@@ -36,26 +36,70 @@ class Planta extends Model
      */
     public function getTaxonomiaAttribute(): array
     {
+        $fuente = $this->tieneTaxonomiaPropia() ? $this : ($this->taxonomiaReferencia() ?? $this);
+
         return [
-            'Reino'    => $this->reino,
-            'División' => $this->division,
-            'Clase'    => $this->clase,
-            'Orden'    => $this->orden,
-            'Familia'  => $this->familia,
-            'Género'   => $this->genero,
+            'Reino'    => $fuente->reino,
+            'División' => $fuente->division,
+            'Clase'    => $fuente->clase,
+            'Orden'    => $fuente->orden,
+            'Familia'  => $fuente->familia,
+            'Género'   => $fuente->genero,
             'Especie'  => $this->cientifico ?: null,
         ];
     }
 
     /**
      * True si tiene al menos un nivel taxonómico registrado (más allá
-     * del Reino), es decir, si la identificación no quedó totalmente
-     * indeterminada.
+     * del Reino), propio o tomado de la Enciclopedia Botánica.
      */
     public function getTaxonomiaDeterminadaAttribute(): bool
     {
+        return $this->tieneTaxonomiaPropia() || $this->taxonomiaReferencia() !== null;
+    }
+
+    /**
+     * True cuando la clasificación que se muestra viene del registro de la
+     * Enciclopedia Botánica con el mismo nombre científico.
+     */
+    public function getTaxonomiaHeredadaAttribute(): bool
+    {
+        return ! $this->tieneTaxonomiaPropia() && $this->taxonomiaReferencia() !== null;
+    }
+
+    private function tieneTaxonomiaPropia(): bool
+    {
         return (bool) ($this->clase || $this->orden || $this->familia || $this->genero);
     }
+
+    /**
+     * Registro con taxonomía completa y el mismo nombre científico (por lo
+     * general, la ficha de la Enciclopedia Botánica). Así las fichas del
+     * catálogo muestran la clasificación sin duplicar los datos.
+     */
+    private function taxonomiaReferencia(): ?self
+    {
+        if ($this->taxonomiaReferenciaCargada) {
+            return $this->taxonomiaReferenciaCache;
+        }
+        $this->taxonomiaReferenciaCargada = true;
+
+        $cientifico = mb_strtolower(trim((string) $this->cientifico));
+        if ($cientifico === '' || str_ends_with($cientifico, ' sp.') || $cientifico === 'sp.' || str_contains($cientifico, 'no determinado')) {
+            return $this->taxonomiaReferenciaCache = null;
+        }
+
+        return $this->taxonomiaReferenciaCache = static::query()
+            ->whereRaw('LOWER(TRIM(cientifico)) = ?', [$cientifico])
+            ->whereNotNull('genero')
+            ->where('id', '!=', $this->id ?? 0)
+            ->orderBy('id')
+            ->first();
+    }
+
+    private bool $taxonomiaReferenciaCargada = false;
+
+    private ?self $taxonomiaReferenciaCache = null;
 
     public function getImagenUrlAttribute(): ?string
     {

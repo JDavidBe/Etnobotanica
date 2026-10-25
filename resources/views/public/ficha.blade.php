@@ -153,7 +153,7 @@
     <div class="info-card taxonomia-card">
       <h3><i class="fas fa-dna"></i> Clasificación taxonómica</h3>
 
-      @if(!$planta->taxonomia_determinada && !$planta->genero)
+      @if(!$planta->taxonomia_determinada)
         <p class="tax-aviso">
           <i class="fas fa-triangle-exclamation"></i>
           Identificación taxonómica no confirmada para el nombre común reportado.
@@ -180,7 +180,11 @@
         @endforeach
       </dl>
 
-      @if($planta->taxonomia_nota)
+      @if($planta->taxonomia_heredada)
+        <p class="tax-nota">
+          <i class="fas fa-circle-info"></i> Clasificación tomada de la Enciclopedia Botánica para <em>{{ $planta->cientifico }}</em>.
+        </p>
+      @elseif($planta->taxonomia_nota)
         <p class="tax-nota">
           <i class="fas fa-circle-info"></i> {{ $planta->taxonomia_nota }}
         </p>

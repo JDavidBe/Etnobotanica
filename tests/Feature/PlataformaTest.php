@@ -194,3 +194,18 @@ it('PF-14 muestra la sección Dialogando Saberes', function () {
 it('PF-15 ya no expone la ruta pública de ejecución de seeders', function () {
     $this->get('/run-sumapaz-seeder-xyz789')->assertNotFound();
 });
+
+it('PF-16 una ficha del catálogo hereda la taxonomía de la Enciclopedia', function () {
+    $enc = Categoria::create(['nombre' => 'Enciclopedia Botánica', 'icono' => 'fas fa-book-open', 'descripcion' => 'x', 'orden' => 4]);
+    $cat = Subtema::create(['categoria_id' => $enc->id, 'nombre' => 'Catálogo Taxonómico']);
+    crearPlanta(['nombre' => 'Ruda', 'cientifico' => 'Ruta graveolens', 'categoria_id' => $enc->id, 'subtema_id' => $cat->id,
+        'reino' => 'Plantae', 'division' => 'Magnoliophyta', 'clase' => 'Magnoliopsida', 'orden' => 'Sapindales', 'familia' => 'Rutaceae', 'genero' => 'Ruta']);
+    $p = crearPlanta(['nombre' => 'La Ruda', 'cientifico' => 'Ruta graveolens', 'categoria_id' => $this->medicina->id, 'subtema_id' => $this->digestion->id]);
+
+    $this->get("/plantas/{$p->id}")
+        ->assertOk()
+        ->assertSee('Rutaceae')
+        ->assertSee('Clasificación tomada de la Enciclopedia Botánica')
+        ->assertDontSee('Identificación taxonómica no confirmada');
+});
+
